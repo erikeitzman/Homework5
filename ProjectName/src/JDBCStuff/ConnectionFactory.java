@@ -1,8 +1,6 @@
 package JDBCStuff;
 
 import org.apache.log4j.Logger;
-
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,6 +12,7 @@ public class ConnectionFactory {
     public static final String USER = "eeitzman";
     public static final String PASSWORD = "letmein";
     public static final String DRIVER_CLASS = "com.mysql.jdbc.Driver"; 
+    private static Logger log = Logger.getLogger(ConnectionFactory.class.getName());
      
     //private constructor
     private ConnectionFactory() {
@@ -29,14 +28,8 @@ public class ConnectionFactory {
         try {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
-        	  static Logger log = Logger.getLogger(ConnectionFactory.class.getName());
-        	   
-        	   public static void main(String[] args)throws IOException,SQLException{
-        	      log.debug("Unable to connect to Database");
-        	      
-        	   }
+        		log.log(null, "asdfasdfasdfasdf", e);
         	}
-        }
         return connection;
     }   
      
