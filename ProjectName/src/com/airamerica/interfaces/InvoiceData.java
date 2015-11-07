@@ -1,4 +1,9 @@
 package com.airamerica.interfaces;
+
+import java.sql.*;
+
+import JDBCStuff.DatabaseInfo;
+
 /* Assignment 5 - (Phase IV) */
 /* NOTE: Donot change the package name or any of the method signatures.
  *  
@@ -31,7 +36,11 @@ public class InvoiceData {
 	 */
 	public static void addPerson(String personCode, String firstName, String lastName, 
 			String phoneNo, String street, String city, String state, 
-			String zip, String country) { }
+			String zip, String country) { 
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps;
+		ResultSet rs;
+	}
 
 	/**
 	 * Method that removes every airport record from the database
