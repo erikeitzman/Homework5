@@ -2,6 +2,8 @@ package com.airamerica.interfaces;
 
 import java.sql.*;
 
+import com.airamerica.Person;
+
 import JDBCStuff.DatabaseInfo;
 
 /* Assignment 5 - (Phase IV) */
@@ -41,88 +43,86 @@ public class InvoiceData {
 		PreparedStatement ps;
 		ResultSet rs;
 		
-		String PersonQuery = "select a.AlbumID, a.AlbumTitle, b.BandName, a.AlbumYear, a.AlbumNumber from Albums as a Join Bands as b on a.BandID = b.BandID where a.AlbumTitle like ?;";
+		String addressQuery = "Insert into Address (Street, City, State, Zip, Country) values (?,?,?,?,?)";
+		try {
+			ps = conn.prepareStatement(addressQuery);
+			ps.setString(1, street);
+			ps.setString(2, city);
+			ps.setString(3, state);
+			ps.setString(4, zip);
+			ps.setString(5, country);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String addressIDQuery = "Select ID from Address where Street = ? and City = ? and State = ? and Zip = ? and Country = ?;";
+		int addressID = 0;
 		Person a = null;
 		try {
-			ps = conn.prepareStatement(PersonQuery);
+			ps = conn.prepareStatement(addressIDQuery);
+			ps.setString(1, street);
+			ps.setString(2, city);
+			ps.setString(3, state);
+			ps.setString(4, zip);
+			ps.setString(5, country);
+			rs = ps.executeQuery();
+			while(rs.next()){
+			addressID = rs.getInt("AddressID");
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+			String personCodeQuery = "Select Code from Person where Code like ?;";
+		try {
+			ps = conn.prepareStatement(personCodeQuery);
+			ps.setString(1, personCode);
+			rs = ps.executeQuery();
+			
+			if (rs.next()){
+				String removePerson = "Delete from Person where Code = ?;";
+				rs.close();
+				ps.close();
+				
+				ps = conn.prepareStatement(removePerson);
+				ps.setString(1,  personCode);
+				ps.executeUpdate();
+				ps.close();
+			}else{
+			ps.close();
+			rs.close();
+			
+			String personQuery = "Insert into Person (Code, FirstName, LastName, AddressCode, PhoneNo) values (?,?,?,?,?);";
+			ps = conn.prepareStatement(personQuery);
 			ps.setString(1,personCode);
 			ps.setString(2,firstName);
 			ps.setString(3,lastName);
-			ps.setString(4,phoneNo);
-			ps.setString(5,street);
-			ps.setString(6,city);
-			ps.setString(7,state);
-			ps.setString(8,zip);
-			ps.setString(9,country);
-			rs = ps.executeQuery();
-			
-			while (rs.next()) {
-
-				String bandName = rs.getString("BandName");
-				BandBean bb = new BandBean();
-				Band whatever = bb.getBand(bandName);
-				a = new Album(rs.getString("AlbumTitle"), rs.getInt("AlbumYear"), whatever, rs.getInt("AlbumNumber"));
-				a.setAlbumId(Integer.parseInt(rs.getString("AlbumID")));
+			ps.setInt(4,addressID);
+			ps.setString(5,phoneNo);
+			ps.executeUpdate();
+			ps.close();
 			}
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		
 		try {
-			if (rs != null && !rs.isClosed())
+			if (rs != null && !rs.isClosed()){
 				rs.close();
-			if (ps != null && !ps.isClosed())
-				ps.close();
-			if (conn != null && !conn.isClosed())
-				conn.close();
-		} catch (SQLException e) {
-			System.out.println("SQLException: ");
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		return a;
-	}
-
-	public List<Album> getAlbums() {
-		Connection conn = DatabaseInfo.getConnection();
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		ArrayList<Album> albums = new ArrayList<Album>();
-
-		String getAlbumsQuery = "select AlbumTitle from Albums;";
-
-		try {
-			ps = conn.prepareStatement(getAlbumsQuery);
-			rs = ps.executeQuery();
-
-			
-			while (rs.next()) {
-				AlbumBean bb = new AlbumBean();
-				Album something = bb.getDetailedAlbum(rs.getString("AlbumTitle"));
-				albums.add(something);
 			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		try {
-			if (rs != null && !rs.isClosed())
-				rs.close();
-			if (ps != null && !ps.isClosed())
+			if (ps != null && !ps.isClosed()){
 				ps.close();
-			if (conn != null && !conn.isClosed())
+			}
+			if (conn != null && !conn.isClosed()){
 				conn.close();
+			}
 		} catch (SQLException e) {
 			System.out.println("SQLException: ");
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		return albums;
-
-	}
 	}
 
 	/**
