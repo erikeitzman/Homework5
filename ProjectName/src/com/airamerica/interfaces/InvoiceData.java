@@ -106,7 +106,7 @@ public class InvoiceData {
 			}else{
 			ps.close();
 			rs.close();
-			
+			}
 			String personQuery = "Insert into Person (Code, FirstName, LastName, AddressCode, PhoneNo) values (?,?,?,?,?);";
 			ps = conn.prepareStatement(personQuery);
 			ps.setString(1,personCode);
@@ -116,7 +116,6 @@ public class InvoiceData {
 			ps.setString(5,phoneNo);
 			ps.executeUpdate();
 			ps.close();
-			}
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -244,7 +243,25 @@ public class InvoiceData {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-			String customerCodeQuery = "Select Code from Customer where Code like ?;";
+//		
+//		String personIDQuery = "select ID from Person where Code = ?;";
+//		int personID = 0;
+//		try{
+//			ps = conn.prepareStatement(personIDQuery);
+//			ps.setString(1, primaryContactPersonCode);
+//			rs = ps.executeQuery();
+//			
+//			while (rs.next()){
+//				personID = rs.getInt("ID");					
+//			}
+//			
+//		} catch (SQLException e1) {
+//			e1.printStackTrace();
+//		}
+		
+		
+		
+		String customerCodeQuery = "Select Code from Customer where Code like ?;";
 		try {
 			ps = conn.prepareStatement(customerCodeQuery);
 			ps.setString(1, customerCode);
@@ -262,35 +279,16 @@ public class InvoiceData {
 			}else{
 			ps.close();
 			rs.close();
-			
-			String customerQuery = "Insert into Customer (Code, Type, PersonCode, Name, AirlineMiles) values (?,?,?,?,?);";
-			String personIDQuery = "select ID from Person where Code = ?;";
-			int personID = 0;
-			
-			try{
-				ps = conn.prepareStatement(personIDQuery);
-				ps.setString(1, primaryContactPersonCode);
-				rs = ps.executeQuery();
-				
-				while (rs.next()){
-					personID = rs.getInt("ID");					
-				}
-				
-			} catch (SQLException e1) {
-				e1.printStackTrace();
 			}
-			
+			String customerQuery = "Insert into Customer (Code, Type, PersonCode, Name, AirlineMiles) values (?,?,?,?,?);";
 			ps = conn.prepareStatement(customerQuery);
 			ps.setString(1, customerCode);
 			ps.setString(2, customerType);
-			ps.setInt(3, personID);
+			ps.setString(3, primaryContactPersonCode);
 			ps.setString(4, name);
 			ps.setInt(5, airlineMiles);
-			
-			
 			ps.executeUpdate();
 			ps.close();
-			}
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
