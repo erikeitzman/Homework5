@@ -40,6 +40,89 @@ public class InvoiceData {
 		Connection conn = DatabaseInfo.getConnection();
 		PreparedStatement ps;
 		ResultSet rs;
+		
+		String PersonQuery = "select a.AlbumID, a.AlbumTitle, b.BandName, a.AlbumYear, a.AlbumNumber from Albums as a Join Bands as b on a.BandID = b.BandID where a.AlbumTitle like ?;";
+		Person a = null;
+		try {
+			ps = conn.prepareStatement(PersonQuery);
+			ps.setString(1,personCode);
+			ps.setString(2,firstName);
+			ps.setString(3,lastName);
+			ps.setString(4,phoneNo);
+			ps.setString(5,street);
+			ps.setString(6,city);
+			ps.setString(7,state);
+			ps.setString(8,zip);
+			ps.setString(9,country);
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+
+				String bandName = rs.getString("BandName");
+				BandBean bb = new BandBean();
+				Band whatever = bb.getBand(bandName);
+				a = new Album(rs.getString("AlbumTitle"), rs.getInt("AlbumYear"), whatever, rs.getInt("AlbumNumber"));
+				a.setAlbumId(Integer.parseInt(rs.getString("AlbumID")));
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		try {
+			if (rs != null && !rs.isClosed())
+				rs.close();
+			if (ps != null && !ps.isClosed())
+				ps.close();
+			if (conn != null && !conn.isClosed())
+				conn.close();
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return a;
+	}
+
+	public List<Album> getAlbums() {
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		ArrayList<Album> albums = new ArrayList<Album>();
+
+		String getAlbumsQuery = "select AlbumTitle from Albums;";
+
+		try {
+			ps = conn.prepareStatement(getAlbumsQuery);
+			rs = ps.executeQuery();
+
+			
+			while (rs.next()) {
+				AlbumBean bb = new AlbumBean();
+				Album something = bb.getDetailedAlbum(rs.getString("AlbumTitle"));
+				albums.add(something);
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			if (rs != null && !rs.isClosed())
+				rs.close();
+			if (ps != null && !ps.isClosed())
+				ps.close();
+			if (conn != null && !conn.isClosed())
+				conn.close();
+		} catch (SQLException e) {
+			System.out.println("SQLException: ");
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		return albums;
+
+	}
 	}
 
 	/**
