@@ -40,8 +40,8 @@ public class InvoiceData {
 			String phoneNo, String street, String city, String state, 
 			String zip, String country) { 
 		Connection conn = DatabaseInfo.getConnection();
-		PreparedStatement ps;
-		ResultSet rs;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		
 		String addressQuery = "Insert into Address (Street, City, State, Zip, Country) values (?,?,?,?,?)";
 		try {
