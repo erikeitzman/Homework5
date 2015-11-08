@@ -136,7 +136,80 @@ public class InvoiceData {
 	public static void addAirport(String airportCode, String name, String street, 
 			String city, String state, String zip, String country, 
 			int latdegs, int latmins, int londegs, int lonmins, 
-			double passengerFacilityFee) { }
+			double passengerFacilityFee) {
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String addressQuery = "Insert into Address (Street, City, State, Zip, Country) values (?,?,?,?,?)";
+		try {
+			ps = conn.prepareStatement(addressQuery);
+			ps.setString(1, street);
+			ps.setString(2, city);
+			ps.setString(3, state);
+			ps.setString(4, zip);
+			ps.setString(5, country);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String addressIDQuery = "Select ID from Address where Street = ? and City = ? and State = ? and Zip = ? and Country = ?;";
+		int addressID = 0;
+		Person a = null;
+		try {
+			ps = conn.prepareStatement(addressIDQuery);
+			ps.setString(1, street);
+			ps.setString(2, city);
+			ps.setString(3, state);
+			ps.setString(4, zip);
+			ps.setString(5, country);
+			rs = ps.executeQuery();
+			while(rs.next()){
+			addressID = rs.getInt("ID");
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+			String airportCodeQuery = "Select Code from Airport where Code like ?;";
+		try {
+			ps = conn.prepareStatement(airportCodeQuery);
+			ps.setString(1, airportCode);
+			rs = ps.executeQuery();
+			
+			if (rs.next()){
+				String removePerson = "Delete from Person where Code = ?;";
+				rs.close();
+				ps.close();
+				
+				ps = conn.prepareStatement(removePerson);
+				ps.setString(1,  airportCode);
+				ps.executeUpdate();
+				ps.close();
+			}else{
+			ps.close();
+			rs.close();
+			
+			double latitude = latdegs + latmins/60;
+			double longitude = londegs + lonmins/60;
+			String airportQuery = "Insert into Airport (Code, Name, AddressCode, Latitude, Longitude, PassengerFacilityFee) values (?,?,?,?,?,?,?,?);";
+			ps = conn.prepareStatement(airportQuery);
+			ps.setString(1, airportCode);
+			ps.setString(2, name);
+			ps.setInt(3,addressID);
+			ps.setDouble(4, latitude);
+			ps.setDouble(5, longitude);
+			ps.setDouble(6, passengerFacilityFee);
+			ps.executeUpdate();
+			ps.close();
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 	
 	/**
 	 * Adds an email record corresponding person record corresponding to the
