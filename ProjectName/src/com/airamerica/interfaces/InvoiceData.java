@@ -69,7 +69,7 @@ public class InvoiceData {
 			ps.setString(5, country);
 			rs = ps.executeQuery();
 			while(rs.next()){
-			addressID = rs.getInt("AddressID");
+			addressID = rs.getInt("ID");
 			}
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
@@ -108,21 +108,21 @@ public class InvoiceData {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		try {
-			if (rs != null && !rs.isClosed()){
-				rs.close();
-			}
-			if (ps != null && !ps.isClosed()){
-				ps.close();
-			}
-			if (conn != null && !conn.isClosed()){
-				conn.close();
-			}
-		} catch (SQLException e) {
-			System.out.println("SQLException: ");
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+//		try {
+//			if (rs != null && !rs.isClosed()){
+//				rs.close();
+//			}
+//			if (ps != null && !ps.isClosed()){
+//				ps.close();
+//			}
+//			if (conn != null && !conn.isClosed()){
+//				conn.close();
+//			}
+//		} catch (SQLException e) {
+//			System.out.println("SQLException: ");
+//			e.printStackTrace();
+//			throw new RuntimeException(e);
+//		}
 	}
 
 	/**
