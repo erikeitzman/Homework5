@@ -31,7 +31,20 @@ public class InvoiceData {
 	/**
 	 * Method that removes every person record from the database
 	 */
-	public static void removeAllPersons() { }
+	public static void removeAllPersons() {
+	Connection conn = DatabaseInfo.getConnection();
+	PreparedStatement ps = null;
+	ResultSet rs = null;
+	String removeQuery = "Delete from Person;";
+	try {
+		ps = conn.prepareStatement(removeQuery);
+		ps.executeUpdate();
+		ps.close();
+	} catch (SQLException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+	}
 
 	/**
 	 * Method to add a person record to the database with the provided data. 
@@ -194,7 +207,7 @@ public class InvoiceData {
 			
 			double latitude = latdegs + latmins/60;
 			double longitude = londegs + lonmins/60;
-			String airportQuery = "Insert into Airport (Code, Name, AddressCode, Latitude, Longitude, PassengerFacilityFee) values (?,?,?,?,?,?,?,?);";
+			String airportQuery = "Insert into Airport (Code, Name, AddressCode, Latitude, Longitude, PassengerFacilityFee) values (?,?,?,?,?,?);";
 			ps = conn.prepareStatement(airportQuery);
 			ps.setString(1, airportCode);
 			ps.setString(2, name);
