@@ -170,7 +170,6 @@ public class InvoiceData {
 		}
 		String addressIDQuery = "Select ID from Address where Street = ? and City = ? and State = ? and Zip = ? and Country = ?;";
 		int addressID = 0;
-		Person a = null;
 		try {
 			ps = conn.prepareStatement(addressIDQuery);
 			ps.setString(1, street);
@@ -240,7 +239,63 @@ public class InvoiceData {
 	 */
 	public static void addCustomer(String customerCode, String customerType, 
 			String primaryContactPersonCode, String name, 
-			int airlineMiles) {	}
+			int airlineMiles) {
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+			String customerCodeQuery = "Select Code from Customer where Code like ?;";
+		try {
+			ps = conn.prepareStatement(customerCodeQuery);
+			ps.setString(1, customerCode);
+			rs = ps.executeQuery();
+			
+			if (rs.next()){
+				String removeCustomer = "Delete from Customer where Code = ?;";
+				rs.close();
+				ps.close();
+				
+				ps = conn.prepareStatement(removeCustomer);
+				ps.setString(1,  customerCode);
+				ps.executeUpdate();
+				ps.close();
+			}else{
+			ps.close();
+			rs.close();
+			
+			String customerQuery = "Insert into Customer (Code, Type, PersonCode, Name, AirlineMiles) values (?,?,?,?,?);";
+			String personIDQuery = "select ID from Person where Code = ?;";
+			int personID = 0;
+			
+			try{
+				ps = conn.prepareStatement(personIDQuery);
+				ps.setString(1, primaryContactPersonCode);
+				rs = ps.executeQuery();
+				
+				while (rs.next()){
+					personID = rs.getInt("ID");					
+				}
+				
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			
+			ps = conn.prepareStatement(customerQuery);
+			ps.setString(1, customerCode);
+			ps.setString(2, customerType);
+			ps.setInt(3, personID);
+			ps.setString(4, name);
+			ps.setInt(5, airlineMiles);
+			
+			
+			ps.executeUpdate();
+			ps.close();
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 
 	/**
 	 * Removes all product records from the database
