@@ -306,7 +306,65 @@ public class InvoiceData {
 	 */
 	public static void addStandardTicket(String productCode,String depAirportCode, 
 			String arrAirportCode, String depTime, String arrTime, 
-			String flightNo, String flightClass, String aircraftType) { }
+			String flightNo, String flightClass, String aircraftType) { 
+		
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+			String standardCodeQuery = "Select Code from Standard where Code like ?;";
+		try {
+			ps = conn.prepareStatement(standardCodeQuery);
+			ps.setString(1, productCode);
+			rs = ps.executeQuery();
+			
+			if (rs.next()){
+				String removeStandard = "Delete from Standard where Code = ?;";
+				rs.close();
+				ps.close();
+				
+				ps = conn.prepareStatement(removeStandard);
+				ps.setString(1,  productCode);
+				ps.executeUpdate();
+				ps.close();
+			}else{
+			ps.close();
+			rs.close();
+			}
+			String standardQuery = "Insert into Standard (Code, DepartureCity, ArrivalCity, DepartureDateTime, ArrivalDateTime, FlightNo, FlightClass, AircraftType) values (?,?,?,?,?,?,?,?);";
+			String productsIDQuery = "select ID from Products where Code = ?;";
+			int productID = 0;
+			
+			try{
+				ps = conn.prepareStatement(productsIDQuery);
+				ps.setString(1, productCode);
+				rs = ps.executeQuery();
+				
+				while (rs.next()){
+					productID = rs.getInt("ID");					
+				}
+				
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			
+			ps = conn.prepareStatement(standardQuery);
+			ps.setString(1, productCode);
+			ps.setString(2, depAirportCode);
+			ps.setString(3, arrAirportCode);
+			ps.setString(4, depTime);
+			ps.setString(5, arrTime);
+			ps.setString(6, flightNo);
+			ps.setString(7, flightClass);
+			ps.setString(8, aircraftType);
+			ps.executeUpdate();
+			ps.close();
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 		
 	
 	 /** 
