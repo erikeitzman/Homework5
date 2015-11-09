@@ -27,6 +27,17 @@ import JDBCStuff.DatabaseInfo;
  *
  */
 public class InvoiceData {
+	
+	//Testing thing
+	public static void main(String args[]) {
+		// Comment so i can push
+		InvoiceData.addPerson("123", "john", "smith", "123-456-7890", "fake st", "lincoln", "NE", "68508", "USA");
+		InvoiceData.addPerson("456", "jane", "smith", "123-456-7890", "fake st", "lincoln", "NE", "68508", "USA");
+		InvoiceData.addPerson("789", "Jim", "Johns", "fake number", "Dodge", "Omaha", "NE", "68700", "USA");
+		InvoiceData.addPerson("123123", "James", "Johns", "fake number", "DodgeST", "Omaha", "NE", "68700", "USA");
+		InvoiceData.addAirport("LAX", "Los Angeles", "LA St", "LA", "CA", "12345", "USA", 10, 20, 100, 120, 0);
+		InvoiceData.addCustomer("C001", "Government", "123", "UNL", 100000);
+	}
 
 	/**
 	 * Method that removes every person record from the database
@@ -375,7 +386,6 @@ public class InvoiceData {
 			String seasonEndDate, String depAirportCode, String arrAirportCode, 
 			String depTime, String arrTime,	String flightNo, String flightClass, 
 			String aircraftType, double rebate) { }
-	 
 	 /** Adds an awardsTicket record to the database with the
 	 * provided data.  
 	 */
