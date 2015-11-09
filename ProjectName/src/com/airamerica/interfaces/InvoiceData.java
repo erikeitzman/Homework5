@@ -37,6 +37,7 @@ public class InvoiceData {
 		InvoiceData.addPerson("123123", "James", "Johns", "fake number", "DodgeST", "Omaha", "NE", "68700", "USA");
 		InvoiceData.addAirport("LAX", "Los Angeles", "LA St", "LA", "CA", "12345", "USA", 10, 20, 100, 120, 0);
 		InvoiceData.addCustomer("C001", "Government", "123", "UNL", 100000);
+		
 	}
 
 	/**
@@ -151,7 +152,21 @@ public class InvoiceData {
 	/**
 	 * Method that removes every airport record from the database
 	 */
-	public static void removeAllAirports() { }
+	public static void removeAllAirports() {
+		
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String removeQuery = "Delete from Airport;";
+		try {
+			ps = conn.prepareStatement(removeQuery);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 	
 	/**
 	 * Method to add a airport record to the database with the provided data. 
@@ -242,7 +257,21 @@ public class InvoiceData {
 	/**
 	 * Method that removes every customer record from the database
 	 */
-	public static void removeAllCustomers() { }
+	public static void removeAllCustomers() { 
+		
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String removeQuery = "Delete from Customer;";
+		try {
+			ps = conn.prepareStatement(removeQuery);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 
 	/**
 	 * Method to add a customer record to the database with the provided data. 
@@ -309,7 +338,21 @@ public class InvoiceData {
 	/**
 	 * Removes all product records from the database
 	 */
-	public static void removeAllProducts() { }
+	public static void removeAllProducts() {
+		
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String removeQuery = "Delete from Products;";
+		try {
+			ps = conn.prepareStatement(removeQuery);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 
 	/**
 	 * Adds an standardTicket record to the database with the
@@ -385,20 +428,194 @@ public class InvoiceData {
 	public static void addOffSeasonTicket(String productCode, String seasonStartDate, 
 			String seasonEndDate, String depAirportCode, String arrAirportCode, 
 			String depTime, String arrTime,	String flightNo, String flightClass, 
-			String aircraftType, double rebate) { }
+			String aircraftType, double rebate) {
+		
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+			String offSeasonCodeQuery = "Select Code from OffSeason where Code like ?;";
+		try {
+			ps = conn.prepareStatement(offSeasonCodeQuery);
+			ps.setString(1, productCode);
+			rs = ps.executeQuery();
+			
+			if (rs.next()){
+				String removeOffSeason = "Delete from OffSeason where Code = ?;";
+				rs.close();
+				ps.close();
+				
+				ps = conn.prepareStatement(removeOffSeason);
+				ps.setString(1,  productCode);
+				ps.executeUpdate();
+				ps.close();
+			}else{
+			ps.close();
+			rs.close();
+			}
+			String offSeasonQuery = "Insert into OffSeason (Code, SeasonStartDate, SeasonEndDate, DepartureCity, ArrivalCity, DepartureDateTime, ArrivalDateTime, FlightNo, FlightClass, AircraftType, Rebate) values (?,?,?,?,?,?,?,?,?,?,?);";
+			String productsIDQuery = "select ID from Products where Code = ?;";
+			int productID = 0;
+			
+			try{
+				ps = conn.prepareStatement(productsIDQuery);
+				ps.setString(1, productCode);
+				rs = ps.executeQuery();
+				
+				while (rs.next()){
+					productID = rs.getInt("ID");					
+				}
+				
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			
+			ps = conn.prepareStatement(offSeasonQuery);
+			ps.setString(1, productCode);
+			ps.setString(2, seasonStartDate);
+			ps.setString(3, seasonEndDate);
+			ps.setString(4, depAirportCode);
+			ps.setString(5, arrAirportCode);
+			ps.setString(6, depTime);
+			ps.setString(7, arrTime);
+			ps.setString(8, flightNo);
+			ps.setString(9, flightClass);
+			ps.setString(10, aircraftType);
+			ps.setDouble(11, rebate);
+			ps.executeUpdate();
+			ps.close();
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 	 /** Adds an awardsTicket record to the database with the
 	 * provided data.  
 	 */
 	public static void addAwardsTicket(String productCode,String depAirportCode, 
 			String arrAirportCode, String depTime, String arrTime, 
 			String flightNo, String flightClass, 
-			String aircraftType, double pointsPerMile) { } 
+			String aircraftType, double pointsPerMile) { 
+		
+
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+			String awardCodeQuery = "Select Code from Award where Code like ?;";
+		try {
+			ps = conn.prepareStatement(awardCodeQuery);
+			ps.setString(1, productCode);
+			rs = ps.executeQuery();
+			
+			if (rs.next()){
+				String removeAward = "Delete from Award where Code = ?;";
+				rs.close();
+				ps.close();
+				
+				ps = conn.prepareStatement(removeAward);
+				ps.setString(1,  productCode);
+				ps.executeUpdate();
+				ps.close();
+			}else{
+			ps.close();
+			rs.close();
+			}
+			String awardQuery = "Insert into Award (Code, DepartureCity, ArrivalCity, DepartureDateTime, ArrivalDateTime, FlightNo, FlightClass, AircraftType, PointsPerMile) values (?,?,?,?,?,?,?,?,?);";
+			String productsIDQuery = "select ID from Products where Code = ?;";
+			int productID = 0;
+			
+			try{
+				ps = conn.prepareStatement(productsIDQuery);
+				ps.setString(1, productCode);
+				rs = ps.executeQuery();
+				
+				while (rs.next()){
+					productID = rs.getInt("ID");					
+				}
+				
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			
+			ps = conn.prepareStatement(awardQuery);
+			ps.setString(1, productCode);
+			ps.setString(2, depAirportCode);
+			ps.setString(3, arrAirportCode);
+			ps.setString(4, depTime);
+			ps.setString(5, arrTime);
+			ps.setString(6, flightNo);
+			ps.setString(7, flightClass);
+			ps.setString(8, aircraftType);
+			ps.setDouble(9, pointsPerMile);
+			ps.executeUpdate();
+			ps.close();
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	} 
 	
 	/**
 	 * Adds a CheckedBaggage record to the database with the
 	 * provided data.  
 	 */
-	public static void addCheckedBaggage(String productCode, String ticketCode) { }
+	public static void addCheckedBaggage(String productCode, String ticketCode) { 
+		
+
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+			String checkedBaggageCodeQuery = "Select Code from CheckedBaggage where Code like ?;";
+		try {
+			ps = conn.prepareStatement(checkedBaggageCodeQuery);
+			ps.setString(1, productCode);
+			rs = ps.executeQuery();
+			
+			if (rs.next()){
+				String removeCheckedBaggage = "Delete from CheckedBaggage where Code = ?;";
+				rs.close();
+				ps.close();
+				
+				ps = conn.prepareStatement(removeCheckedBaggage);
+				ps.setString(1,  productCode);
+				ps.executeUpdate();
+				ps.close();
+			}else{
+			ps.close();
+			rs.close();
+			}
+			String checkedBaggageQuery = "Insert into CheckedBaggage (Code, TicketCode) values (?,?);";
+			String productsIDQuery = "select ID from Products where Code = ?;";
+			int productID = 0;
+			
+			try{
+				ps = conn.prepareStatement(productsIDQuery);
+				ps.setString(1, productCode);
+				rs = ps.executeQuery();
+				
+				while (rs.next()){
+					productID = rs.getInt("ID");					
+				}
+				
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			
+			ps = conn.prepareStatement(checkedBaggageQuery);
+			ps.setString(1, productCode);
+			ps.setString(2, ticketCode);
+			ps.executeUpdate();
+			ps.close();
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 
 	/**
 	 * Adds a Insurance record to the database with the
@@ -406,29 +623,189 @@ public class InvoiceData {
 	 */
 	public static void addInsurance(String productCode, String productName, 
 			String ageClass, double costPerMile) {	}
-	
+		// TODO database lacking.
 	/**
 	 * Adds a SpecialAssistance record to the database with the
 	 * provided data.  
 	 */
-	public static void addSpecialAssistance(String productCode, String assistanceType) { }
+	public static void addSpecialAssistance(String productCode, String assistanceType) {
+		
+
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+			String specialAssistanceCodeQuery = "Select Code from SpecialAssistance where Code like ?;";
+		try {
+			ps = conn.prepareStatement(specialAssistanceCodeQuery);
+			ps.setString(1, productCode);
+			rs = ps.executeQuery();
+			
+			if (rs.next()){
+				String removeSpecialAssistance = "Delete from SpecialAssistance where Code = ?;";
+				rs.close();
+				ps.close();
+				
+				ps = conn.prepareStatement(removeSpecialAssistance);
+				ps.setString(1,  productCode);
+				ps.executeUpdate();
+				ps.close();
+			}else{
+			ps.close();
+			rs.close();
+			}
+			String specialAssistanceQuery = "Insert into SpecialAssistance (Code, TypeOfService) values (?,?);";
+			String productsIDQuery = "select ID from Products where Code = ?;";
+			int productID = 0;
+			
+			try{
+				ps = conn.prepareStatement(productsIDQuery);
+				ps.setString(1, productCode);
+				rs = ps.executeQuery();
+				
+				while (rs.next()){
+					productID = rs.getInt("ID");					
+				}
+				
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			
+			ps = conn.prepareStatement(specialAssistanceQuery);
+			ps.setString(1, productCode);
+			ps.setString(2, assistanceType);
+			ps.executeUpdate();
+			ps.close();
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 
 	/**
 	 * Adds a refreshment record to the database with the
 	 * provided data.  
 	 */
-	public static void addRefreshment(String productCode, String name, double cost) { }
+	public static void addRefreshment(String productCode, String name, double cost) { 
+		
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+			String refreshmentCodeQuery = "Select Code from Refreshment where Code like ?;";
+		try {
+			ps = conn.prepareStatement(refreshmentCodeQuery);
+			ps.setString(1, productCode);
+			rs = ps.executeQuery();
+			
+			if (rs.next()){
+				String removeRefreshment = "Delete from Refreshment where Code = ?;";
+				rs.close();
+				ps.close();
+				
+				ps = conn.prepareStatement(removeRefreshment);
+				ps.setString(1,  productCode);
+				ps.executeUpdate();
+				ps.close();
+			}else{
+			ps.close();
+			rs.close();
+			}
+			String refreshmentQuery = "Insert into Refreshment (Code, Name, Cost) values (?,?,?);";
+			String productsIDQuery = "select ID from Products where Code = ?;";
+			int productID = 0;
+			
+			try{
+				ps = conn.prepareStatement(productsIDQuery);
+				ps.setString(1, productCode);
+				rs = ps.executeQuery();
+				
+				while (rs.next()){
+					productID = rs.getInt("ID");					
+				}
+				
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			
+			ps = conn.prepareStatement(refreshmentQuery);
+			ps.setString(1, productCode);
+			ps.setString(2, name);
+			ps.setDouble(3, cost);
+			ps.executeUpdate();
+			ps.close();
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 	
 	/**
 	 * Removes all invoice records from the database
 	 */
-	public static void removeAllInvoices() { }
+	public static void removeAllInvoices() {
+		
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String removeQuery = "Delete from Invoice;";
+		try {
+			ps = conn.prepareStatement(removeQuery);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 	
 	/**
 	 * Adds an invoice record to the database with the given data.  
 	 */
 	public static void addInvoice(String invoiceCode, String customerCode, 
-			String salesPersonCode, String invoiceDate) { }
+			String salesPersonCode, String invoiceDate) { 
+		
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+			String invoiceCodeQuery = "Select Code from Invoice where Code like ?;";
+		try {
+			ps = conn.prepareStatement(invoiceCodeQuery);
+			ps.setString(1, invoiceCode);
+			rs = ps.executeQuery();
+			
+			if (rs.next()){
+				String removeInvoice = "Delete from Invoice where Code = ?;";
+				rs.close();
+				ps.close();
+				
+				ps = conn.prepareStatement(removeInvoice);
+				ps.setString(1,  invoiceCode);
+				ps.executeUpdate();
+				ps.close();
+			}else{
+			ps.close();
+			rs.close();
+			}
+			String invoiceQuery = "Insert into Refreshment (Code, CustomerCode, PersonCode, Date) values (?,?,?,?);";
+			
+			ps = conn.prepareStatement(invoiceQuery);
+			ps.setString(1, invoiceCode);
+			ps.setString(2, customerCode);
+			ps.setString(3, salesPersonCode);
+			ps.setString(4, invoiceDate);
+			
+			ps.executeUpdate();
+			ps.close();
+			
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
 	
 	/**
 	 * Adds a particular Ticket (corresponding to <code>productCode</code>) to an 
