@@ -40,8 +40,12 @@ public class InvoiceData {
 		InvoiceData.addPerson("789", "Jim", "Johns", "fake number", "Dodge", "Omaha", "NE", "68700", "USA");
 		InvoiceData.addPerson("123123", "James", "Johns", "fake number", "DodgeST", "Omaha", "NE", "68700", "USA");
 		InvoiceData.addAirport("LAX", "Los Angeles", "LA St", "LA", "CA", "12345", "USA", 10, 20, 100, 120, 0);
+		InvoiceData.addAirport("ORD", "Chicago", "Some St", "Some", "fake", "13345", "USA", 20, 30, 300, 120, 0);
 		InvoiceData.addCustomer("C001", "Government", "123", "UNL", 100000);
 		//InvoiceData.addSpecialAssistance("i3re", "wheelchair");
+		InvoiceData.addInvoice("INV001", "C001", "123", "12-12-2014");
+		InvoiceData.addStandardTicket("1234", "LAX", "ORD", "9:30", "12:30","12456v", "EC", "BOakdb");
+		InvoiceData.addTicketToInvoice("INV001", "1234", "01-03-2014", "shut up");
 	}
 
 	/**
@@ -101,7 +105,6 @@ public class InvoiceData {
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
-			String personCodeQuery = "Select Code from Person where Code like ?;";
 		try {
 			deleteIfExists("Person", "Code", personCode, ps, rs, conn);
 			String personQuery = "Insert into Person (Code, FirstName, LastName, AddressCode, PhoneNo) values (?,?,?,?,?);";
@@ -177,23 +180,7 @@ public class InvoiceData {
 		}
 			String airportCodeQuery = "Select Code from Airport where Code like ?;";
 		try {
-			ps = conn.prepareStatement(airportCodeQuery);
-			ps.setString(1, airportCode);
-			rs = ps.executeQuery();
-			
-			if (rs.next()){
-				String removePerson = "Delete from Person where Code = ?;";
-				rs.close();
-				ps.close();
-				
-				ps = conn.prepareStatement(removePerson);
-				ps.setString(1,  airportCode);
-				ps.executeUpdate();
-				ps.close();
-			}else{
-			ps.close();
-			rs.close();
-			
+			deleteIfExists("Airport", "Code", airportCode, ps, rs, conn);
 			double latitude = latdegs + latmins/60;
 			double longitude = londegs + lonmins/60;
 			String airportQuery = "Insert into Airport (Code, Name, AddressCode, Latitude, Longitude, PassengerFacilityFee) values (?,?,?,?,?,?);";
@@ -206,7 +193,7 @@ public class InvoiceData {
 			ps.setDouble(6, passengerFacilityFee);
 			ps.executeUpdate();
 			ps.close();
-			}
+			
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -246,25 +233,8 @@ public class InvoiceData {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String customerCodeQuery = "Select Code from Customer where Code like ?;";
 		try {
-			ps = conn.prepareStatement(customerCodeQuery);
-			ps.setString(1, customerCode);
-			rs = ps.executeQuery();
-			
-			if (rs.next()){
-				String removeCustomer = "Delete from Customer where Code = ?;";
-				rs.close();
-				ps.close();
-				
-				ps = conn.prepareStatement(removeCustomer);
-				ps.setString(1,  customerCode);
-				ps.executeUpdate();
-				ps.close();
-			}else{
-			ps.close();
-			rs.close();
-			}
+			deleteIfExists("Customer", "Code", customerCode, ps, rs, conn);
 			String customerQuery = "Insert into Customer (Code, Type, PersonCode, Name, AirlineMiles) values (?,?,?,?,?);";
 			ps = conn.prepareStatement(customerQuery);
 			ps.setString(1, customerCode);
@@ -308,25 +278,8 @@ public class InvoiceData {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-			String standardCodeQuery = "Select Code from Standard where Code like ?;";
 		try {
-			ps = conn.prepareStatement(standardCodeQuery);
-			ps.setString(1, productCode);
-			rs = ps.executeQuery();
-			
-			if (rs.next()){
-				String removeStandard = "Delete from Standard where Code = ?;";
-				rs.close();
-				ps.close();
-				
-				ps = conn.prepareStatement(removeStandard);
-				ps.setString(1,  productCode);
-				ps.executeUpdate();
-				ps.close();
-			}else{
-			ps.close();
-			rs.close();
-			}
+			deleteIfExists("Standard", "Code", productCode, ps, rs, conn);
 			String standardQuery = "Insert into Standard (Code, DepartureCity, ArrivalCity, DepartureDateTime, ArrivalDateTime, FlightNo, FlightClass, AircraftType) values (?,?,?,?,?,?,?,?);";
 			String productsIDQuery = "select ID from Products where Code = ?;";
 			int productID = 0;
@@ -374,25 +327,8 @@ public class InvoiceData {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-			String offSeasonCodeQuery = "Select Code from OffSeason where Code like ?;";
 		try {
-			ps = conn.prepareStatement(offSeasonCodeQuery);
-			ps.setString(1, productCode);
-			rs = ps.executeQuery();
-			
-			if (rs.next()){
-				String removeOffSeason = "Delete from OffSeason where Code = ?;";
-				rs.close();
-				ps.close();
-				
-				ps = conn.prepareStatement(removeOffSeason);
-				ps.setString(1,  productCode);
-				ps.executeUpdate();
-				ps.close();
-			}else{
-			ps.close();
-			rs.close();
-			}
+			deleteIfExists("OffSeason", "Code", productCode, ps, rs, conn);
 			String offSeasonQuery = "Insert into OffSeason (Code, SeasonStartDate, SeasonEndDate, DepartureCity, ArrivalCity, DepartureDateTime, ArrivalDateTime, FlightNo, FlightClass, AircraftType, Rebate) values (?,?,?,?,?,?,?,?,?,?,?);";
 			String productsIDQuery = "select ID from Products where Code = ?;";
 			int productID = 0;
@@ -442,25 +378,8 @@ public class InvoiceData {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-			String awardCodeQuery = "Select Code from Award where Code like ?;";
 		try {
-			ps = conn.prepareStatement(awardCodeQuery);
-			ps.setString(1, productCode);
-			rs = ps.executeQuery();
-			
-			if (rs.next()){
-				String removeAward = "Delete from Award where Code = ?;";
-				rs.close();
-				ps.close();
-				
-				ps = conn.prepareStatement(removeAward);
-				ps.setString(1,  productCode);
-				ps.executeUpdate();
-				ps.close();
-			}else{
-			ps.close();
-			rs.close();
-			}
+			deleteIfExists("Award", "Code", productCode, ps, rs, conn);
 			String awardQuery = "Insert into Award (Code, DepartureCity, ArrivalCity, DepartureDateTime, ArrivalDateTime, FlightNo, FlightClass, AircraftType, PointsPerMile) values (?,?,?,?,?,?,?,?,?);";
 			String productsIDQuery = "select ID from Products where Code = ?;";
 			int productID = 0;
@@ -505,25 +424,8 @@ public class InvoiceData {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-			String checkedBaggageCodeQuery = "Select Code from CheckedBaggage where Code like ?;";
 		try {
-			ps = conn.prepareStatement(checkedBaggageCodeQuery);
-			ps.setString(1, productCode);
-			rs = ps.executeQuery();
-			
-			if (rs.next()){
-				String removeCheckedBaggage = "Delete from CheckedBaggage where Code = ?;";
-				rs.close();
-				ps.close();
-				
-				ps = conn.prepareStatement(removeCheckedBaggage);
-				ps.setString(1,  productCode);
-				ps.executeUpdate();
-				ps.close();
-			}else{
-			ps.close();
-			rs.close();
-			}
+			deleteIfExists("CheckedBaggage", "Code", productCode, ps, rs, conn);
 			String checkedBaggageQuery = "Insert into CheckedBaggage (Code, TicketCode) values (?,?);";
 			String productsIDQuery = "select ID from Products where Code = ?;";
 			int productID = 0;
@@ -591,26 +493,8 @@ public class InvoiceData {
 			log.error("SQLException", e1);
 		}
 
-		
-			String specialAssistanceCodeQuery = "Select ProductID from SpecialAssistance where ProductID = ?;";
 		try {
-			ps = conn.prepareStatement(specialAssistanceCodeQuery);
-			ps.setString(1, productCode);
-			rs = ps.executeQuery();
-			
-			if (rs.next()){
-				String removeSpecialAssistance = "Delete from SpecialAssistance where ProductID = ?;";
-				rs.close();
-				ps.close();
-				
-				ps = conn.prepareStatement(removeSpecialAssistance);
-				ps.setString(1,  productCode);
-				ps.executeUpdate();
-				ps.close();
-			}else{
-			ps.close();
-			rs.close();
-			}
+			deleteIfExists("SpecialAssistance", "Code", productCode, ps, rs, conn);
 			String specialAssistanceQuery = "Insert into SpecialAssistance (ProductID, TypeOfService) values (?,?);";
 			String productsIDQuery = "select ID from Products where Code = ?;";
 			productID = 0;
@@ -646,25 +530,8 @@ public class InvoiceData {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-			String refreshmentCodeQuery = "Select Code from Refreshment where Code like ?;";
 		try {
-			ps = conn.prepareStatement(refreshmentCodeQuery);
-			ps.setString(1, productCode);
-			rs = ps.executeQuery();
-			
-			if (rs.next()){
-				String removeRefreshment = "Delete from Refreshment where Code = ?;";
-				rs.close();
-				ps.close();
-				
-				ps = conn.prepareStatement(removeRefreshment);
-				ps.setString(1,  productCode);
-				ps.executeUpdate();
-				ps.close();
-			}else{
-			ps.close();
-			rs.close();
-			}
+			deleteIfExists("Refreshment", "Code", productCode, ps, rs, conn);
 			String refreshmentQuery = "Insert into Refreshment (Code, Name, Cost) values (?,?,?);";
 			String productsIDQuery = "select ID from Products where Code = ?;";
 			int productID = 0;
@@ -718,26 +585,9 @@ public class InvoiceData {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-			String invoiceCodeQuery = "Select Code from Invoice where Code like ?;";
 		try {
-			ps = conn.prepareStatement(invoiceCodeQuery);
-			ps.setString(1, invoiceCode);
-			rs = ps.executeQuery();
-			
-			if (rs.next()){
-				String removeInvoice = "Delete from Invoice where Code = ?;";
-				rs.close();
-				ps.close();
-				
-				ps = conn.prepareStatement(removeInvoice);
-				ps.setString(1,  invoiceCode);
-				ps.executeUpdate();
-				ps.close();
-			}else{
-			ps.close();
-			rs.close();
-			}
-			String invoiceQuery = "Insert into Refreshment (Code, CustomerCode, PersonCode, Date) values (?,?,?,?);";
+			deleteIfExists("Invoice", "Code", invoiceCode, ps, rs, conn);
+			String invoiceQuery = "Insert into Invoice (Code, CustomerCode, PersonCode, Date) values (?,?,?,?);";
 			
 			ps = conn.prepareStatement(invoiceQuery);
 			ps.setString(1, invoiceCode);
@@ -757,7 +607,59 @@ public class InvoiceData {
 	 invoice corresponding to the provided <code>invoiceCode</code> with the given
 	 additional details */
 	public static void addTicketToInvoice(String invoiceCode, String productCode, 
-			String travelDate, String ticketNote) { }
+			String travelDate, String ticketNote) {
+		
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			deleteIfExists("Ticket", "Code", invoiceCode, ps, rs, conn);
+			String ticketQuery = "Insert into Ticket (invoiceCode, productCode, travelDate, ticketNote) values (?,?,?,?);";
+			String invoiceIDQuery = "select ID from Invoice where Code = ?;";
+			String productsIDQuery = "select ID from Products where Code = ?;";
+			int invoiceID = 0;
+			int productID = 0;
+			
+			try{
+				ps = conn.prepareStatement(invoiceIDQuery);
+				ps.setString(1, invoiceCode);
+				rs = ps.executeQuery();
+				
+				while (rs.next()){
+					invoiceID = rs.getInt("ID");					
+				}
+				
+			} catch (SQLException e1) {
+				log.error("SQLException", e1);
+			}
+			
+			try{
+				ps = conn.prepareStatement(productsIDQuery);
+				ps.setString(2, productCode);
+				rs = ps.executeQuery();
+				
+				while (rs.next()){
+					productID = rs.getInt("ID");					
+				}
+				
+			} catch (SQLException e1) {
+				log.error("SQLException", e1);
+			}
+			
+			ps = conn.prepareStatement(ticketQuery);
+			ps.setString(1, invoiceCode);
+			ps.setString(2, productCode);
+			ps.setString(3, travelDate);
+			ps.setString(4, ticketNote);
+			ps.executeUpdate();
+			ps.close();
+			
+		} catch (SQLException e1) {
+			log.error("SQLException", e1);
+		}
+
+	}
 	
 	/* Adds a Passenger information to an 
 	  invoice corresponding to the provided <code>invoiceCode</code> */
