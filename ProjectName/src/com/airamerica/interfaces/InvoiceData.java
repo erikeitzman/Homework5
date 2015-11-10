@@ -203,7 +203,9 @@ public class InvoiceData {
 	/*Adds an email record corresponding person record corresponding to the
 	  provided <code>personCode</code> */
 
-	public static void addEmail(String personCode, String email) { }
+	public static void addEmail(String personCode, String email) { 
+		
+	}
 
 
 	//Method that removes every customer record from the database
@@ -277,17 +279,7 @@ public class InvoiceData {
 		Connection conn = DatabaseInfo.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-
-		String productQuery = "Insert into Products(Code, Type) values (?,?);";
-		try{
-			ps = conn.prepareStatement(productQuery);
-			ps.setString(1, productCode);
-			ps.setString(2, "Standard");
-			ps.executeUpdate();
-		} catch (SQLException e1) {
-			log.error("SQLException", e1);
-		}
-
+		addProduct(productCode, "Standard", ps, rs, conn);
 		try {
 			deleteIfExists("Standard", "Code", productCode, ps, rs, conn);
 			String standardQuery = "Insert into Standard (DepartureID, ArrivalID, DepartureDateTime, ArrivalDateTime, FlightNo, FlightClass, AircraftType, ProductID, Code) values (?,?,?,?,?,?,?,?,?);";
@@ -741,6 +733,35 @@ public class InvoiceData {
 				ps.close();
 				rs.close();
 			}
+		} catch (SQLException e1) {
+			log.error("SQLException", e1);
+		}
+	}
+	
+	public static int findID(String tableName, String fieldToCheck, String code, PreparedStatement ps, ResultSet rs, Connection conn){
+		String findQuery = "Select ID from "+tableName+" where "+fieldToCheck+" = ?;";
+		try{
+			ps = conn.prepareStatement(findQuery);
+			ps.setString(1, code);
+			rs = ps.executeQuery();
+			while (rs.next()){
+				return rs.getInt("ID");					
+			}
+		} catch (SQLException e1) {
+			log.error("SQLException", e1);
+		}
+		return 0;
+	}
+	
+	public static void addProduct(String code, String type, PreparedStatement ps, ResultSet rs, Connection conn){
+		String prodQuery = "Insert into Products (Code, Type) Values (?,?);";
+		try{
+		deleteIfExists("Products", "Code", code, ps, rs, conn);
+		ps = conn.prepareStatement(prodQuery);
+		ps.setString(1, code);
+		ps.setString(2, type);
+		ps.executeUpdate();
+		ps.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
