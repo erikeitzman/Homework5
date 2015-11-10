@@ -19,7 +19,7 @@ import JDBCStuff.DatabaseInfo;
  * from the .dat files and test these methods to insert data into your 
  * database.
  * 
- * Donot forget to change your reports generation classes to read from 
+ * Do `not forget to change your reports generation classes to read from 
  * your database instead of the .dat files.
  */
 
@@ -42,7 +42,6 @@ public class InvoiceData {
 		InvoiceData.addAirport("LAX", "Los Angeles", "LA St", "LA", "CA", "12345", "USA", 10, 20, 100, 120, 0);
 		InvoiceData.addAirport("ORD", "Chicago", "Some St", "Some", "fake", "13345", "USA", 20, 30, 300, 120, 0);
 		InvoiceData.addCustomer("C001", "Government", "123", "UNL", 100000);
-		//InvoiceData.addSpecialAssistance("i3re", "wheelchair");
 		InvoiceData.addInvoice("INV001", "C001", "123", "12-12-2014");
 		InvoiceData.addStandardTicket("1234", "LAX", "ORD", "9:30", "12:30","12456v", "EC", "BOakdb");
 		InvoiceData.addTicketToInvoice("INV001", "1234", "01-03-2014", "shut up");
@@ -613,15 +612,16 @@ public class InvoiceData {
 		Connection conn = DatabaseInfo.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-
+		int customerID = findID("Customer", "Code", customerCode, ps, rs, conn);
+		int personID = findID("Person", "Code", salesPersonCode, ps, rs, conn);
 		try {
 			deleteIfExists("Invoice", "Code", invoiceCode, ps, rs, conn);
-			String invoiceQuery = "Insert into Invoice (Code, CustomerCode, PersonCode, Date) values (?,?,?,?);";
+			String invoiceQuery = "Insert into Invoice (Code, CustomerID, PersonID, Date) values (?,?,?,?);";
 
 			ps = conn.prepareStatement(invoiceQuery);
 			ps.setString(1, invoiceCode);
-			ps.setString(2, customerCode);
-			ps.setString(3, salesPersonCode);
+			ps.setInt(2, customerID);
+			ps.setInt(3, personID);
 			ps.setString(4, invoiceDate);
 
 			ps.executeUpdate();
