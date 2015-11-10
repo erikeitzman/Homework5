@@ -37,7 +37,7 @@ public class InvoiceData {
 		InvoiceData.addPerson("123123", "James", "Johns", "fake number", "DodgeST", "Omaha", "NE", "68700", "USA");
 		InvoiceData.addAirport("LAX", "Los Angeles", "LA St", "LA", "CA", "12345", "USA", 10, 20, 100, 120, 0);
 		InvoiceData.addCustomer("C001", "Government", "123", "UNL", 100000);
-		
+		InvoiceData.addSpecialAssistance("i3re", "wheelchair");
 	}
 
 	/**
@@ -630,19 +630,44 @@ public class InvoiceData {
 	 */
 	public static void addSpecialAssistance(String productCode, String assistanceType) {
 		
-
 		Connection conn = DatabaseInfo.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-			String specialAssistanceCodeQuery = "Select Code from SpecialAssistance where Code like ?;";
+		String productQuery = "Insert into Products (Code) values (?)";
+		try {
+			ps = conn.prepareStatement(productQuery);
+			ps.setString(1, productCode);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String productIDQuery = "Select ID from Products where Code = ?;";
+		int productID = 0;
+		try {
+			ps = conn.prepareStatement(productIDQuery);
+			ps.setString(1, productCode);
+			rs = ps.executeQuery();
+			
+			while(rs.next()){
+			productID = rs.getInt("ID");
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		
+			String specialAssistanceCodeQuery = "Select ProductID from SpecialAssistance where ProductID = ?;";
 		try {
 			ps = conn.prepareStatement(specialAssistanceCodeQuery);
 			ps.setString(1, productCode);
 			rs = ps.executeQuery();
 			
 			if (rs.next()){
-				String removeSpecialAssistance = "Delete from SpecialAssistance where Code = ?;";
+				String removeSpecialAssistance = "Delete from SpecialAssistance where ProductID = ?;";
 				rs.close();
 				ps.close();
 				
@@ -654,9 +679,9 @@ public class InvoiceData {
 			ps.close();
 			rs.close();
 			}
-			String specialAssistanceQuery = "Insert into SpecialAssistance (Code, TypeOfService) values (?,?);";
+			String specialAssistanceQuery = "Insert into SpecialAssistance (ProductID, TypeOfService) values (?,?);";
 			String productsIDQuery = "select ID from Products where Code = ?;";
-			int productID = 0;
+			productID = 0;
 			
 			try{
 				ps = conn.prepareStatement(productsIDQuery);
