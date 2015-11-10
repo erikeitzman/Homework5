@@ -2,6 +2,8 @@ package com.airamerica.interfaces;
 
 import java.sql.*;
 
+import org.apache.log4j.Logger;
+
 import com.airamerica.Person;
 
 import JDBCStuff.DatabaseInfo;
@@ -27,6 +29,7 @@ import JDBCStuff.DatabaseInfo;
  *
  */
 public class InvoiceData {
+	private static Logger log = Logger.getLogger(InvoiceData.class.getName());
 	
 	//Testing thing
 	public static void main(String args[]) {
@@ -42,7 +45,7 @@ public class InvoiceData {
 
 	/**
 	 * Method that removes every person record from the database
-	 */
+	 */	
 	public static void removeAllPersons() {
 	Connection conn = DatabaseInfo.getConnection();
 	PreparedStatement ps = null;
@@ -53,14 +56,13 @@ public class InvoiceData {
 		ps.executeUpdate();
 		ps.close();
 	} catch (SQLException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
+		log.error("SQLException", e1);
 	}
 	}
 
-	/**
-	 * Method to add a person record to the database with the provided data. 
-	 */
+	
+	 //Method to add a person record to the database with the provided data. 
+	 
 	public static void addPerson(String personCode, String firstName, String lastName, 
 			String phoneNo, String street, String city, String state, 
 			String zip, String country) { 
@@ -79,8 +81,7 @@ public class InvoiceData {
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 		String addressIDQuery = "Select ID from Address where Street = ? and City = ? and State = ? and Zip = ? and Country = ?;";
 		int addressID = 0;
@@ -97,8 +98,7 @@ public class InvoiceData {
 			addressID = rs.getInt("ID");
 			}
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 			String personCodeQuery = "Select Code from Person where Code like ?;";
 		try {
@@ -129,29 +129,12 @@ public class InvoiceData {
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
-//		try {
-//			if (rs != null && !rs.isClosed()){
-//				rs.close();
-//			}
-//			if (ps != null && !ps.isClosed()){
-//				ps.close();
-//			}
-//			if (conn != null && !conn.isClosed()){
-//				conn.close();
-//			}
-//		} catch (SQLException e) {
-//			System.out.println("SQLException: ");
-//			e.printStackTrace();
-//			throw new RuntimeException(e);
-//		}
 	}
 
-	/**
-	 * Method that removes every airport record from the database
-	 */
+	// Method that removes every airport record from the database
+	 
 	public static void removeAllAirports() {
 		
 		Connection conn = DatabaseInfo.getConnection();
@@ -163,14 +146,13 @@ public class InvoiceData {
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 	}
 	
-	/**
-	 * Method to add a airport record to the database with the provided data. 
-	 */
+	
+	 // Method to add a airport record to the database with the provided data. 
+	 
 	public static void addAirport(String airportCode, String name, String street, 
 			String city, String state, String zip, String country, 
 			int latdegs, int latmins, int londegs, int lonmins, 
@@ -190,8 +172,7 @@ public class InvoiceData {
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 		String addressIDQuery = "Select ID from Address where Street = ? and City = ? and State = ? and Zip = ? and Country = ?;";
 		int addressID = 0;
@@ -207,8 +188,7 @@ public class InvoiceData {
 			addressID = rs.getInt("ID");
 			}
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 			String airportCodeQuery = "Select Code from Airport where Code like ?;";
 		try {
@@ -243,20 +223,19 @@ public class InvoiceData {
 			ps.close();
 			}
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 	}
 	
-	/**
-	 * Adds an email record corresponding person record corresponding to the
-	 * provided <code>personCode</code>
-	 */
+	
+	  /*Adds an email record corresponding person record corresponding to the
+	  provided <code>personCode</code> */
+	 
 	public static void addEmail(String personCode, String email) { }
 	
-	/**
-	 * Method that removes every customer record from the database
-	 */
+	
+	 //Method that removes every customer record from the database
+	 
 	public static void removeAllCustomers() { 
 		
 		Connection conn = DatabaseInfo.getConnection();
@@ -268,38 +247,19 @@ public class InvoiceData {
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 	}
 
-	/**
-	 * Method to add a customer record to the database with the provided data. 
-	 */
+	
+	// Method to add a customer record to the database with the provided data. 
+	 
 	public static void addCustomer(String customerCode, String customerType, 
 			String primaryContactPersonCode, String name, 
 			int airlineMiles) {
 		Connection conn = DatabaseInfo.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		
-//		
-//		String personIDQuery = "select ID from Person where Code = ?;";
-//		int personID = 0;
-//		try{
-//			ps = conn.prepareStatement(personIDQuery);
-//			ps.setString(1, primaryContactPersonCode);
-//			rs = ps.executeQuery();
-//			
-//			while (rs.next()){
-//				personID = rs.getInt("ID");					
-//			}
-//			
-//		} catch (SQLException e1) {
-//			e1.printStackTrace();
-//		}
-		
-		
 		
 		String customerCodeQuery = "Select Code from Customer where Code like ?;";
 		try {
@@ -330,14 +290,13 @@ public class InvoiceData {
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 	}
 
-	/**
-	 * Removes all product records from the database
-	 */
+	
+	 //Removes all product records from the database
+	 
 	public static void removeAllProducts() {
 		
 		Connection conn = DatabaseInfo.getConnection();
@@ -349,15 +308,13 @@ public class InvoiceData {
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 	}
 
-	/**
-	 * Adds an standardTicket record to the database with the
-	 * provided data.  
-	 */
+	
+	 /*Adds an standardTicket record to the database with the
+	 provided data.  */
 	public static void addStandardTicket(String productCode,String depAirportCode, 
 			String arrAirportCode, String depTime, String arrTime, 
 			String flightNo, String flightClass, String aircraftType) { 
@@ -399,7 +356,7 @@ public class InvoiceData {
 				}
 				
 			} catch (SQLException e1) {
-				e1.printStackTrace();
+				log.error("SQLException", e1);
 			}
 			
 			ps = conn.prepareStatement(standardQuery);
@@ -415,16 +372,14 @@ public class InvoiceData {
 			ps.close();
 			
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 	}
 		
 	
-	 /** 
-	 * Adds an offSeasonTicket record to the database with the
-	 * provided data.  
-	 */
+	  
+	 /* Adds an offSeasonTicket record to the database with the
+	  provided data. */
 	public static void addOffSeasonTicket(String productCode, String seasonStartDate, 
 			String seasonEndDate, String depAirportCode, String arrAirportCode, 
 			String depTime, String arrTime,	String flightNo, String flightClass, 
@@ -467,7 +422,7 @@ public class InvoiceData {
 				}
 				
 			} catch (SQLException e1) {
-				e1.printStackTrace();
+				log.error("SQLException", e1);
 			}
 			
 			ps = conn.prepareStatement(offSeasonQuery);
@@ -486,13 +441,12 @@ public class InvoiceData {
 			ps.close();
 			
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 	}
-	 /** Adds an awardsTicket record to the database with the
-	 * provided data.  
-	 */
+	
+	 /*Adds an awardsTicket record to the database with the
+	 provided data.*/
 	public static void addAwardsTicket(String productCode,String depAirportCode, 
 			String arrAirportCode, String depTime, String arrTime, 
 			String flightNo, String flightClass, 
@@ -536,7 +490,7 @@ public class InvoiceData {
 				}
 				
 			} catch (SQLException e1) {
-				e1.printStackTrace();
+				log.error("SQLException", e1);
 			}
 			
 			ps = conn.prepareStatement(awardQuery);
@@ -553,15 +507,12 @@ public class InvoiceData {
 			ps.close();
 			
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 	} 
 	
-	/**
-	 * Adds a CheckedBaggage record to the database with the
-	 * provided data.  
-	 */
+	/* Adds a CheckedBaggage record to the database with the
+	 provided data. */
 	public static void addCheckedBaggage(String productCode, String ticketCode) { 
 		
 
@@ -602,7 +553,7 @@ public class InvoiceData {
 				}
 				
 			} catch (SQLException e1) {
-				e1.printStackTrace();
+				log.error("SQLException", e1);
 			}
 			
 			ps = conn.prepareStatement(checkedBaggageQuery);
@@ -612,22 +563,20 @@ public class InvoiceData {
 			ps.close();
 			
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 	}
 
-	/**
-	 * Adds a Insurance record to the database with the
-	 * provided data.  
-	 */
+	/* Adds a Insurance record to the database with the
+	 provided data. */
 	public static void addInsurance(String productCode, String productName, 
-			String ageClass, double costPerMile) {	}
-		// TODO database lacking.
-	/**
-	 * Adds a SpecialAssistance record to the database with the
-	 * provided data.  
-	 */
+			String ageClass, double costPerMile) {
+		
+	
+	}
+	
+	/* Adds a SpecialAssistance record to the database with the
+	 provided data. */
 	public static void addSpecialAssistance(String productCode, String assistanceType) {
 		
 		Connection conn = DatabaseInfo.getConnection();
@@ -641,8 +590,7 @@ public class InvoiceData {
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 		String productIDQuery = "Select ID from Products where Code = ?;";
 		int productID = 0;
@@ -655,8 +603,7 @@ public class InvoiceData {
 			productID = rs.getInt("ID");
 			}
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 
 		
@@ -693,7 +640,7 @@ public class InvoiceData {
 				}
 				
 			} catch (SQLException e1) {
-				e1.printStackTrace();
+				log.error("SQLException", e1);
 			}
 			
 			ps = conn.prepareStatement(specialAssistanceQuery);
@@ -703,15 +650,11 @@ public class InvoiceData {
 			ps.close();
 			
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 	}
 
-	/**
-	 * Adds a refreshment record to the database with the
-	 * provided data.  
-	 */
+	// Adds a refreshment record to the database with the provided data. 
 	public static void addRefreshment(String productCode, String name, double cost) { 
 		
 		Connection conn = DatabaseInfo.getConnection();
@@ -751,7 +694,7 @@ public class InvoiceData {
 				}
 				
 			} catch (SQLException e1) {
-				e1.printStackTrace();
+				log.error("SQLException", e1);
 			}
 			
 			ps = conn.prepareStatement(refreshmentQuery);
@@ -762,14 +705,11 @@ public class InvoiceData {
 			ps.close();
 			
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 	}
 	
-	/**
-	 * Removes all invoice records from the database
-	 */
+	// Removes all invoice records from the database
 	public static void removeAllInvoices() {
 		
 		Connection conn = DatabaseInfo.getConnection();
@@ -781,14 +721,11 @@ public class InvoiceData {
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 	}
 	
-	/**
-	 * Adds an invoice record to the database with the given data.  
-	 */
+	// Adds an invoice record to the database with the given data.
 	public static void addInvoice(String invoiceCode, String customerCode, 
 			String salesPersonCode, String invoiceDate) { 
 		
@@ -827,56 +764,43 @@ public class InvoiceData {
 			ps.close();
 			
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			log.error("SQLException", e1);
 		}
 	}
 	
-	/**
-	 * Adds a particular Ticket (corresponding to <code>productCode</code>) to an 
-	 * invoice corresponding to the provided <code>invoiceCode</code> with the given
-	 * additional details
-	 */
+	/* Adds a particular Ticket (corresponding to <code>productCode</code>) to an 
+	 invoice corresponding to the provided <code>invoiceCode</code> with the given
+	 additional details */
 	public static void addTicketToInvoice(String invoiceCode, String productCode, 
 			String travelDate, String ticketNote) { }
 	
-	/**
-	 * Adds a Passenger information to an 
-	 * invoice corresponding to the provided <code>invoiceCode</code> 
-	 */
+	/* Adds a Passenger information to an 
+	  invoice corresponding to the provided <code>invoiceCode</code> */
 	public static void addPassengerInformation(String invoiceCode, String productCode, 
 			String personCode, 
 			String identity, int age, String nationality, String seat){ }
 	
-	/**
-	 * Adds an Insurance Service (corresponding to <code>productCode</code>) to an 
-	 * invoice corresponding to the provided <code>invoiceCode</code> with the given
-	 * number of quantity and associated ticket information
-	 */
+	/* Adds an Insurance Service (corresponding to <code>productCode</code>) to an 
+	 invoice corresponding to the provided <code>invoiceCode</code> with the given
+	 number of quantity and associated ticket information */
 	public static void addInsuranceToInvoice(String invoiceCode, String productCode, 
 			int quantity, String ticketCode) { }
 
-	/**
-	 * Adds a CheckedBaggage Service (corresponding to <code>productCode</code>) to an 
-	 * invoice corresponding to the provided <code>invoiceCode</code> with the given
-	 * number of quantity.
-	 */
+	/* Adds a CheckedBaggage Service (corresponding to <code>productCode</code>) to an 
+	  invoice corresponding to the provided <code>invoiceCode</code> with the given
+	  number of quantity. */
 	public static void addCheckedBaggageToInvoice(String invoiceCode, String productCode, 
 			int quantity) { }
 		
-	/**
-	 * Adds a SpecialAssistance Service (corresponding to <code>productCode</code>) to an 
-	 * invoice corresponding to the provided <code>invoiceCode</code> with the given
-	 * number of quantity.
-	 */
+	/* Adds a SpecialAssistance Service (corresponding to <code>productCode</code>) to an 
+	  invoice corresponding to the provided <code>invoiceCode</code> with the given
+	  number of quantity. */
 	public static void addSpecialAssistanceToInvoice(String invoiceCode, String productCode, 
 			String personCode) { }
 	
-	/**
-	 * Adds a Refreshment service (corresponding to <code>productCode</code>) to an 
-	 * invoice corresponding to the provided <code>invoiceCode</code> with the given
-	 * number of quantity.
-	 */
+	/* Adds a Refreshment service (corresponding to <code>productCode</code>) to an 
+	  invoice corresponding to the provided <code>invoiceCode</code> with the given
+	  number of quantity. */
 	public static void addRefreshmentToInvoice(String invoiceCode, 
 			String productCode, int quantity) { }
 }
