@@ -355,7 +355,7 @@ public class InvoiceData {
 		Connection conn = DatabaseInfo.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-
+		addProduct(productCode, "OffSeason", ps , rs ,conn);
 		try {
 			deleteIfExists("OffSeason", "Code", productCode, ps, rs, conn);
 			String offSeasonQuery = "Insert into OffSeason (Code, SeasonStartDate, SeasonEndDate, DepartureCity, ArrivalCity, DepartureDateTime, ArrivalDateTime, FlightNo, FlightClass, AircraftType, Rebate) values (?,?,?,?,?,?,?,?,?,?,?);";
@@ -406,7 +406,7 @@ public class InvoiceData {
 		Connection conn = DatabaseInfo.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-
+		addProduct(productCode, "Award", ps , rs, conn);
 		try {
 			deleteIfExists("Award", "Code", productCode, ps, rs, conn);
 			String awardQuery = "Insert into Award (Code, DepartureCity, ArrivalCity, DepartureDateTime, ArrivalDateTime, FlightNo, FlightClass, AircraftType, PointsPerMile) values (?,?,?,?,?,?,?,?,?);";
@@ -452,7 +452,7 @@ public class InvoiceData {
 		Connection conn = DatabaseInfo.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-
+		addProduct(productCode, "CheckedBaggage", ps, rs, conn);
 		try {
 			deleteIfExists("CheckedBaggage", "Code", productCode, ps, rs, conn);
 			String checkedBaggageQuery = "Insert into CheckedBaggage (Code, TicketCode) values (?,?);";
@@ -498,7 +498,7 @@ public class InvoiceData {
 		Connection conn = DatabaseInfo.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-
+		addProduct(productCode, "SpecialAssistance", ps, rs, conn);
 		String productQuery = "Insert into Products (Code) values (?)";
 		try {
 			ps = conn.prepareStatement(productQuery);
@@ -558,7 +558,7 @@ public class InvoiceData {
 		Connection conn = DatabaseInfo.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-
+		addProduct(productCode, "Refreshments", ps, rs, conn);
 		try {
 			deleteIfExists("Refreshment", "Code", productCode, ps, rs, conn);
 			String refreshmentQuery = "Insert into Refreshment (Code, Name, Cost) values (?,?,?);";
