@@ -33,6 +33,7 @@ public class InvoiceData {
 	
 	//Testing thing
 	public static void main(String args[]) {
+		org.apache.log4j.BasicConfigurator.configure();
 		// Comment so i can push
 		InvoiceData.addPerson("123", "john", "smith", "123-456-7890", "fake st", "lincoln", "NE", "68508", "USA");
 		InvoiceData.addPerson("456", "jane", "smith", "123-456-7890", "fake st", "lincoln", "NE", "68508", "USA");
@@ -40,7 +41,7 @@ public class InvoiceData {
 		InvoiceData.addPerson("123123", "James", "Johns", "fake number", "DodgeST", "Omaha", "NE", "68700", "USA");
 		InvoiceData.addAirport("LAX", "Los Angeles", "LA St", "LA", "CA", "12345", "USA", 10, 20, 100, 120, 0);
 		InvoiceData.addCustomer("C001", "Government", "123", "UNL", 100000);
-		InvoiceData.addSpecialAssistance("i3re", "wheelchair");
+		//InvoiceData.addSpecialAssistance("i3re", "wheelchair");
 	}
 
 	/**
@@ -102,23 +103,7 @@ public class InvoiceData {
 		}
 			String personCodeQuery = "Select Code from Person where Code like ?;";
 		try {
-			ps = conn.prepareStatement(personCodeQuery);
-			ps.setString(1, personCode);
-			rs = ps.executeQuery();
-			
-			if (rs.next()){
-				String removePerson = "Delete from Person where Code = ?;";
-				rs.close();
-				ps.close();
-				
-				ps = conn.prepareStatement(removePerson);
-				ps.setString(1,  personCode);
-				ps.executeUpdate();
-				ps.close();
-			}else{
-			ps.close();
-			rs.close();
-			}
+			deleteIfExists("Person", "Code", personCode, ps, rs, conn);
 			String personQuery = "Insert into Person (Code, FirstName, LastName, AddressCode, PhoneNo) values (?,?,?,?,?);";
 			ps = conn.prepareStatement(personQuery);
 			ps.setString(1,personCode);
@@ -803,4 +788,29 @@ public class InvoiceData {
 	  number of quantity. */
 	public static void addRefreshmentToInvoice(String invoiceCode, 
 			String productCode, int quantity) { }
+	
+	public static void deleteIfExists(String tableName, String fieldToCheck, String code, PreparedStatement ps, ResultSet rs, Connection conn){
+	    String query = "Select "+fieldToCheck+" from "+tableName+" where "+fieldToCheck+" = ?;";
+	    try{
+	        ps = conn.prepareStatement(query);
+	        ps.setString(1, code);
+	        rs = ps.executeQuery();
+	        
+	        if(rs.next()){
+	        String removeQuery = "Delete from "+tableName+" where "+fieldToCheck+" = ?;";
+	        rs.close();
+	        ps.close();
+	        ps = conn.prepareStatement(removeQuery);
+	        ps.setString(1, code);
+	        ps.executeUpdate();
+	        ps.close();
+	        }else{
+	        ps.close();
+	        rs.close();
+	        }
+	    } catch (SQLException e1) {
+			log.error("SQLException", e1);
+		}
+	}
 }
+
