@@ -614,10 +614,12 @@ public class InvoiceData {
 		ResultSet rs = null;
 		int customerID = findID("Customer", "Code", customerCode, ps, rs, conn);
 		int personID = findID("Person", "Code", salesPersonCode, ps, rs, conn);
+		
 		try {
 			deleteIfExists("Invoice", "Code", invoiceCode, ps, rs, conn);
 			String invoiceQuery = "Insert into Invoice (Code, CustomerID, PersonID, Date) values (?,?,?,?);";
-
+			String invoicePassengerQuery = "Insert into InvoicePassengers(InvoiceID, PassengerID)";
+			
 			ps = conn.prepareStatement(invoiceQuery);
 			ps.setString(1, invoiceCode);
 			ps.setInt(2, customerID);
@@ -628,6 +630,12 @@ public class InvoiceData {
 			ps.close();
 
 		} catch (SQLException e1) {
+			log.error("SQLException", e1);
+		}
+		int invoiceID = findID("Invoice", "Code", invoiceCode, ps , rs, conn);
+		try{
+			
+		}catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
 	}
@@ -687,8 +695,54 @@ public class InvoiceData {
 	/* Adds a Passenger information to an 
 	  invoice corresponding to the provided <code>invoiceCode</code> */
 	public static void addPassengerInformation(String invoiceCode, String productCode, 
-			String personCode, 
-			String identity, int age, String nationality, String seat){ }
+			String personCode, String identity, int age, String nationality, String seat){
+		
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			//deleteIfExists("Ticket", "Code", invoiceCode, ps, rs, conn);
+			String passengerInformationQuery = "Insert into  (invoiceID, productID, travelDate, ticketNote) values (?,?,?,?);";
+			String invoiceIDQuery = "select ID from Invoice where Code = ?;";
+			String productsIDQuery = "select ID from Products where Code = ?;";
+			int invoiceID = 0;
+			int productID = 0;
+
+			try{
+				ps = conn.prepareStatement(invoiceIDQuery);
+				ps.setString(1, invoiceCode);
+				rs = ps.executeQuery();
+
+				while (rs.next()){
+					invoiceID = rs.getInt("ID");					
+				}
+			} catch (SQLException e1) {
+				log.error("SQLException", e1);
+			}
+			try{
+				ps = conn.prepareStatement(productsIDQuery);
+				ps.setString(1, productCode);
+				rs = ps.executeQuery();
+				while (rs.next()){
+					productID = rs.getInt("ID");					
+				}
+			} catch (SQLException e1) {
+				log.error("SQLException", e1);
+			}
+			ps = conn.prepareStatement(ticketQuery);
+			ps.setInt(1, invoiceID);
+			ps.setInt(2, productID);
+			ps.setString(3, travelDate);
+			ps.setString(4, ticketNote);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e1) {
+			log.error("SQLException", e1);
+		}
+
+		
+	}
 
 	/* Adds an Insurance Service (corresponding to <code>productCode</code>) to an 
 	 invoice corresponding to the provided <code>invoiceCode</code> with the given
