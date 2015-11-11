@@ -35,7 +35,7 @@ public class InvoiceData {
 	public static void main(String args[]) {
 		org.apache.log4j.BasicConfigurator.configure();
 		// Comment so i can push
-		
+//		
 		InvoiceData.addAirport("LNK","Lincoln Municipal","2400 W Adams St","Lincoln","NE","68524","USA",40,50,96,40,0);
 		InvoiceData.addAirport("ORD","Chicago O'Hare Domestic","10000 W O'Hare Ave","Chicago","IL","60666","USA",41,50,87,37,4.50);
 		InvoiceData.addAirport("MDW","Chicago Midway International","5700 S Cicero Ave","Chicago","IL","60638","USA",41,50,87,37,4.50);
@@ -79,9 +79,41 @@ public class InvoiceData {
 		InvoiceData.addCustomer("C008","G","ma12","Mr Joshua Smith",101111);
 		
 		
-		//		
-//		
-//		
+		InvoiceData.addInsurance("ff23","InterNationalInsurance","0-20",0.04);
+		InvoiceData.addStandardTicket("1255","LAX","ORD","09:30","15:55","NA2222","BC","Boeing757");
+		InvoiceData.addCheckedBaggage("90fa","1255");
+		InvoiceData.addStandardTicket("1238","LNK","ORD","06:00","9:08","NA4889","EC","CRJ900");
+		InvoiceData.addSpecialAssistance("xer2","Tricycle");
+		InvoiceData.addOffSeasonTicket("1240","2015-10-07","2016-01-29","LNK","ORD","06:00","9:08","NA4889","EC","CRJ900",0.2);
+		InvoiceData.addStandardTicket("1241","ORD","LNK","21:15","22:42","NA4871","EC","CRJ900");
+		InvoiceData.addInsurance("ff25","Progressive","69-102",0.1);
+		InvoiceData.addOffSeasonTicket("1243","2015-10-07","2016-01-29","ORD","LNK","21:15","22:42","NA4871","EP","CRJ900",0.6);
+		InvoiceData.addCheckedBaggage("90fb","1241");
+		InvoiceData.addStandardTicket("1256","LAX","ORD","09:30","15:55","NA2222","EP","Boeing757");
+		InvoiceData.addAwardsTicket("1257","LAX","ORD","10:15","18:13","NA101","EP","Boeing737-900ER",90);
+		InvoiceData.addStandardTicket("1258","ORD","LAX","10:50","12:50","NA1555","EC","Boeing737-900ER");
+		InvoiceData.addRefreshment("32f4","Indian Buffet",20.00);
+		InvoiceData.addAwardsTicket("1260","ORD","PHX","09:09","11:06","N725","EP","Airbus-A319",110);
+		InvoiceData.addSpecialAssistance("xer4","AdultBassinet");
+		InvoiceData.addStandardTicket("1261","ORD","PHX","09:09","11:06","N725","BC","Airbus-A319");
+		InvoiceData.addInsurance("ff24","Non-Progressive","55-68",0.09);
+		InvoiceData.addOffSeasonTicket("1262","2015-09-01","2016-10-12","PHX","ORD","14:24","19:56","N2000","BC","Airbus-A320",0.15);
+		InvoiceData.addOffSeasonTicket("1263","2015-09-15","2016-12-29","PHX","ORD","07:10","12:42","N488","EC","Airbus-A320",0.25);
+		InvoiceData.addInsurance("fg23","Progressive","21-54",0.08);
+		InvoiceData.addInsurance("fh23","StateInsurance","21-60",0.085);
+		InvoiceData.addCheckedBaggage("90fc","1260");
+		InvoiceData.addSpecialAssistance("xer1","PrioritySeating");
+		InvoiceData.addRefreshment("31f4","Labbat-Beer-15oz",04.50);
+		
+		
+		
+		InvoiceData.addInvoice("INV001", "C003", "1svndr", "2015-04-02");
+		InvoiceData.addTicketToInvoice("INV001", "1241", "2015-06-11", "Operated by Bhaarat");
+		InvoiceData.addPassengerInformation("INV001", "1241", "321nd", "ayylmao", 35, "Jew", "25");
+		InvoiceData.addInsuranceToInvoice("INV001", "ff24", 2, "1241");
+
+		
+		
 //		InvoiceData.addPerson("123", "john", "smith", "123-456-7890", "fake st", "lincoln", "NE", "68508", "USA");
 //		InvoiceData.addPerson("456", "jane", "smith", "123-456-7890", "fake st", "lincoln", "NE", "68508", "USA");
 //		InvoiceData.addPerson("789", "Jim", "Johns", "fake number", "Dodge", "Omaha", "NE", "68700", "USA");
@@ -385,7 +417,7 @@ public class InvoiceData {
 			String standardQuery = "Insert into Standard (DepartureID, ArrivalID, DepartureDateTime, ArrivalDateTime, FlightNo, FlightClass, AircraftType, ProductID, Code) values (?,?,?,?,?,?,?,?,?);";
 			String productsIDQuery = "select ID from Products where Code = ?;";
 			int productID = 0;
-
+			
 			try{
 				ps = conn.prepareStatement(productsIDQuery);
 				ps.setString(1, productCode);
@@ -707,14 +739,11 @@ public class InvoiceData {
 		try {
 			deleteIfExists("Invoice", "Code", invoiceCode, ps, rs, conn);
 			String invoiceQuery = "Insert into Invoice (Code, CustomerID, PersonID, Date) values (?,?,?,?);";
-			String invoicePassengerQuery = "Insert into InvoicePassengers(InvoiceID, PassengerID)";
-			
 			ps = conn.prepareStatement(invoiceQuery);
 			ps.setString(1, invoiceCode);
 			ps.setInt(2, customerID);
 			ps.setInt(3, personID);
 			ps.setString(4, invoiceDate);
-
 			ps.executeUpdate();
 			ps.close();
 			conn.close();
@@ -732,20 +761,16 @@ public class InvoiceData {
 		Connection conn = DatabaseInfo.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-
+		int productID = 0;
+		int invoiceID = 0;
 		try {
-			//deleteIfExists("Ticket", "Code", invoiceCode, ps, rs, conn);
 			String ticketQuery = "Insert into Ticket (invoiceID, productID, travelDate, ticketNote) values (?,?,?,?);";
 			String invoiceIDQuery = "select ID from Invoice where Code = ?;";
 			String productsIDQuery = "select ID from Products where Code = ?;";
-			int invoiceID = 0;
-			int productID = 0;
-
 			try{
 				ps = conn.prepareStatement(invoiceIDQuery);
 				ps.setString(1, invoiceCode);
 				rs = ps.executeQuery();
-
 				while (rs.next()){
 					invoiceID = rs.getInt("ID");					
 				}
@@ -769,10 +794,19 @@ public class InvoiceData {
 			ps.setString(4, ticketNote);
 			ps.executeUpdate();
 			ps.close();
-			conn.close();
-		} catch (SQLException e1) {
+		}catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
+		String ticketProdQuery = "Insert into InvoiceProducts (ProductID, Quantity, Misc, InvoiceID) values (?,1,1,?);";
+		try{
+			ps = conn.prepareStatement(ticketProdQuery);
+			ps.setInt(1, productID);
+			ps.setInt(2, invoiceID);
+			ps.executeUpdate();
+			conn.close();
+	} catch (SQLException e1) {
+		log.error("SQLException", e1);
+	}
 
 	}
 
@@ -845,12 +879,13 @@ public class InvoiceData {
 		int productID = 0;
 		invoiceID = findID("Invoice","Code", invoiceCode,ps,rs,conn);
 		productID = findID("Products","Code", productCode,ps,rs,conn);
-		String insuranceQuery = "Insert into InvoiceProducts (ProductID, Quantity, InvoiceID) values (?,?,?);";
+		String insuranceQuery = "Insert into InvoiceProducts (ProductID, Quantity, Misc, InvoiceID) values (?,?,?,?);";
 		try{
 			ps = conn.prepareStatement(insuranceQuery);
 			ps.setInt(1, productID);
 			ps.setInt(2, quantity);
-			ps.setInt(3, invoiceID);
+			ps.setString(3, ticketCode);
+			ps.setInt(4, invoiceID);
 			ps.executeUpdate();
 			ps.close();
 			conn.close();
@@ -993,5 +1028,46 @@ public class InvoiceData {
 			log.error("SQLException", e1);
 		}
 	}
+	
+	public static String airportCode(int iD){
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String airQuery = "Select Code from Airport where ID = "+iD+";";
+		try{
+		ps = conn.prepareStatement(airQuery);
+		rs = ps.executeQuery();
+		while (rs.next()){
+			String testStr = rs.getString("Code");
+			conn.close();
+			return testStr;					
+		}
+		ps.close();
+	} catch (SQLException e1) {
+		log.error("SQLException", e1);
+	}
+	return "LNK";
+	}
+	public static String TicketCode(int iD){
+		Connection conn = DatabaseInfo.getConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String airQuery = "select a.*, b.* from Ticket a join Products b on b.ID = a.ProductID where a.ID ="+iD+";";
+		try{
+		System.out.println("made it");
+		ps = conn.prepareStatement(airQuery);
+		rs = ps.executeQuery();
+		while (rs.next()){
+			String testStr = rs.getString("Code");
+			conn.close();
+			return testStr;		
+		}
+		ps.close();
+	} catch (SQLException e1) {
+		log.error("SQLException", e1);
+	}
+	return "738";
+	}
+	
 }
 
