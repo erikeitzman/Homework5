@@ -35,30 +35,77 @@ public class InvoiceData {
 	public static void main(String args[]) {
 		org.apache.log4j.BasicConfigurator.configure();
 		// Comment so i can push
-		InvoiceData.addPerson("123", "john", "smith", "123-456-7890", "fake st", "lincoln", "NE", "68508", "USA");
-		InvoiceData.addPerson("456", "jane", "smith", "123-456-7890", "fake st", "lincoln", "NE", "68508", "USA");
-		InvoiceData.addPerson("789", "Jim", "Johns", "fake number", "Dodge", "Omaha", "NE", "68700", "USA");
-		InvoiceData.addPerson("123123", "James", "Johns", "fake number", "DodgeST", "Omaha", "NE", "68700", "USA");
-		InvoiceData.addAirport("LAX", "Los Angeles", "LA St", "LA", "CA", "12345", "USA", 10, 20, 100, 120, 0);
-		InvoiceData.addAirport("ORD", "Chicago", "Some St", "Some", "fake", "13345", "USA", 20, 30, 300, 120, 0);
-		InvoiceData.addCustomer("C001", "Government", "123", "UNL", 100000);
-		InvoiceData.addInvoice("INV001", "C001", "123", "12-12-2014");
-		InvoiceData.addStandardTicket("1234", "LAX", "ORD", "9:30", "12:30","12456v", "EC", "BOakdb");
-		InvoiceData.addAwardsTicket("2344", "LAX", "ORD", "9:30", "12:40", "2323", "EC", "shitty", 1);
-		InvoiceData.addOffSeasonTicket("48645", "2012-05-05", "2012-06-06", "ORD", "LAX", "10:30", "7:35", "adjio", "BC", "767", 50);
-		InvoiceData.addSpecialAssistance("48615615615", "wheelchair");
-		InvoiceData.addRefreshment("1", "coke", 1.50);
-		InvoiceData.addInsurance("adfinsurance", "ProductName", "20-45", 100);
-		InvoiceData.addTicketToInvoice("INV001", "1234", "01-03-2014", "shut up");
-		InvoiceData.addPassengerInformation("INV001", "1234", "456", "ADFASDF", 45, "Bosnian", "20f");
-		InvoiceData.addEmail("123", "adfasdf@gmail.com");
-		InvoiceData.addEmail("123", "johnsmith@gmail.com");
-		InvoiceData.addEmail("789", "adfoaidfjaoidfjaoseifjweiofj@gmail.com");
-		InvoiceData.addCheckedBaggage("90fa", "1234");
-		InvoiceData.addRefreshmentToInvoice("INV001", "1", 3);
-		InvoiceData.addInsuranceToInvoice("INV001", "adfinsurance", 2, "1234");
-		InvoiceData.addCheckedBaggageToInvoice("INV001", "90fa", 5);
-		InvoiceData.addSpecialAssistanceToInvoice("INV001", "48615615615", "5648189189");
+		
+		InvoiceData.addAirport("LNK","Lincoln Municipal","2400 W Adams St","Lincoln","NE","68524","USA",40,50,96,40,0);
+		InvoiceData.addAirport("ORD","Chicago O'Hare Domestic","10000 W O'Hare Ave","Chicago","IL","60666","USA",41,50,87,37,4.50);
+		InvoiceData.addAirport("MDW","Chicago Midway International","5700 S Cicero Ave","Chicago","IL","60638","USA",41,50,87,37,4.50);
+		InvoiceData.addAirport("JFK","John F. Kennedy Domestic","JFK Expy & S Cargo Rd","Jamaica","NY","11430","USA",40,47,73,58,4.50);
+		InvoiceData.addAirport("PHX","Phoenix Sky Harbor Domestic","3400 E Sky Harbor Blvd","Phoenix","AZ","85034","USA",33,29,112,4,4.50);
+		InvoiceData.addAirport("LAX","Los Angeles Airport","1 World Way", "Los Angeles","CA","90045","USA",34,3,118,15,4.50);
+		InvoiceData.addAirport("SJC","San Jose Domestic Airport","1701 Airport Blvd","San Jose","CA","95110","USA",37,20,121,53,4.50);
+		InvoiceData.addAirport("ATL","Hartsfield Jackson Atlanta Domestic Airport","6000 N Terminal Pkwy","Atlanta","GA","30320","USA",33,45,84,23,4.50);	
+		InvoiceData.addAirport("DEN","Denver Domestic Airport","8500 Pea Blvd","Denver","CO","80249","USA",39,45,105,0,4.50);
+		InvoiceData.addAirport("MSP","Minneapolis Saint Paul Domestic Airport","4300 Glumack Drive","St. Paul","MN","55111","USA",44,59,93,14,4.50);
+		
+		
+		InvoiceData.addPerson("944c","Jain","Suresh","142-241-6024","1060 West Addison Street","Chicago","IL","60613","USA");
+		InvoiceData.addPerson("306a","Duka","Ilda","402-241-6024","123 N 1st Street","Omaha","NE","68116","USA");
+		InvoiceData.addPerson("55bb","O'Brien","Miles","402-251-2114","8753 West 3rd Ave.","Dallas","TX","75001","USA");
+		InvoiceData.addPerson("2342","O'Brien","Miles","212-241-6024","123 Friendly Street","Ottawa","ON","K1A 0G9","Canada");
+		InvoiceData.addPerson("aef1","Salman","Gordon","122-141-1032","1 Wall Street","New York","NY","10005-0012","USA");
+		InvoiceData.addPerson("321f","Deer","Bud","","321 Bronx Street","New York","NY","10004","USA");
+		InvoiceData.addPerson("ma12","Sveum","Pale","541-354-3210","1060 West Addison Street","Chicago","IL","60613","USA");
+		InvoiceData.addPerson("321nd","Hartnull","Will","323-541-3210","1060 West Addison Street","Chicago","IL","60613","USA");
+		InvoiceData.addPerson("nf32a","Compton","Patrick","","1060 West Addison Street","Chicago","IL","60613","USA");
+		InvoiceData.addPerson("321na","Samurai","Jon","323-541-3210","301 Front St W"," Toronto"," ON"," M5V 2T6"," Canada");
+		InvoiceData.addPerson("231","Cook","Tom","210-124-3210","1 Blue Jays Way"," Toronto"," ON"," M5V 1J1"," Canada");
+		InvoiceData.addPerson("6doc","Son","Richard","124-366-3210","Campos El290","Mexico City"," FD",""," Mexico");
+		InvoiceData.addPerson("321dr","Baker","C.","122-141-1032","Avery Hall","Lincoln","NE","68503","USA");
+		InvoiceData.addPerson("1svndr","McCoy","Sylvester","","126-01 Roosevelt Ave"," Flushing"," NY","11368","USA");
+		InvoiceData.addPerson("123lst","McGann","Paul","102-147-3522","1 MetLife Stadium Dr"," East Rutherford"," NJ","07073","USA");
+		InvoiceData.addPerson("nwdoc1","Eccleston","Chris","210-124-3210","1 E 161st St"," Bronx"," NY","10451","USA");
+		InvoiceData.addPerson("2ndbestd","Tennant","David","320-141-3142","700 E Grand Ave"," Chicago"," IL"," 60611","USA");
+		InvoiceData.addPerson("wrddoc","Smith","Matt","141-325-1032","333 W 35th St"," Chicago"," IL","60616","USA");
+		InvoiceData.addPerson("bbchar","Ehrmantraut","Kaylee","587-417-1032","800 West 7th Street"," Albuquerque"," NM"," 87105","USA");
+		InvoiceData.addPerson("doc05","Davison","Peter","122-141-1032","123 Cabo San Lucas"," Los Cabos"," BCS"," "," Mexico");
+
+		InvoiceData.addCustomer("C001","C","231","Some Consultants",0);
+		InvoiceData.addCustomer("C002","V","944c","Thor Associates",12500);
+		InvoiceData.addCustomer("C003","G","306a","United Kingdom Postal Service",36000);
+		InvoiceData.addCustomer("C004","C","321f","Mrs Julia Odelay",4170000);
+		InvoiceData.addCustomer("C005","G","bbchar","Robert Industries",0);
+		InvoiceData.addCustomer("C006","C","321dr","University of Nebaska-Omaha",6857441);
+		InvoiceData.addCustomer("C007","V","6doc","Miami Club",0);
+		InvoiceData.addCustomer("C008","G","ma12","Mr Joshua Smith",101111);
+		
+		
+		//		
+//		
+//		
+//		InvoiceData.addPerson("123", "john", "smith", "123-456-7890", "fake st", "lincoln", "NE", "68508", "USA");
+//		InvoiceData.addPerson("456", "jane", "smith", "123-456-7890", "fake st", "lincoln", "NE", "68508", "USA");
+//		InvoiceData.addPerson("789", "Jim", "Johns", "fake number", "Dodge", "Omaha", "NE", "68700", "USA");
+//		InvoiceData.addPerson("123123", "James", "Johns", "fake number", "DodgeST", "Omaha", "NE", "68700", "USA");
+//		InvoiceData.addAirport("LAX", "Los Angeles", "LA St", "LA", "CA", "12345", "USA", 10, 20, 100, 120, 0);
+//		InvoiceData.addAirport("ORD", "Chicago", "Some St", "Some", "fake", "13345", "USA", 20, 30, 300, 120, 0);
+//		InvoiceData.addCustomer("C001", "Government", "123", "UNL", 100000);
+//		InvoiceData.addInvoice("INV001", "C001", "123", "12-12-2014");
+//		InvoiceData.addStandardTicket("1234", "LAX", "ORD", "9:30", "12:30","12456v", "EC", "BOakdb");
+//		InvoiceData.addAwardsTicket("2344", "LAX", "ORD", "9:30", "12:40", "2323", "EC", "shitty", 1);
+//		InvoiceData.addOffSeasonTicket("48645", "2012-05-05", "2012-06-06", "ORD", "LAX", "10:30", "7:35", "adjio", "BC", "767", 50);
+//		InvoiceData.addSpecialAssistance("48615615615", "wheelchair");
+//		InvoiceData.addRefreshment("1", "coke", 1.50);
+//		InvoiceData.addInsurance("adfinsurance", "ProductName", "20-45", 100);
+//		InvoiceData.addTicketToInvoice("INV001", "1234", "01-03-2014", "shut up");
+//		InvoiceData.addPassengerInformation("INV001", "1234", "456", "ADFASDF", 45, "Bosnian", "20f");
+//		InvoiceData.addEmail("123", "adfasdf@gmail.com");
+//		InvoiceData.addEmail("123", "johnsmith@gmail.com");
+//		InvoiceData.addEmail("789", "adfoaidfjaoidfjaoseifjweiofj@gmail.com");
+//		InvoiceData.addCheckedBaggage("90fa", "1234");
+//		InvoiceData.addRefreshmentToInvoice("INV001", "1", 3);
+//		InvoiceData.addInsuranceToInvoice("INV001", "adfinsurance", 2, "1234");
+//		InvoiceData.addCheckedBaggageToInvoice("INV001", "90fa", 5);
+//		InvoiceData.addSpecialAssistanceToInvoice("INV001", "48615615615", "5648189189");
 	}
 
 	/**
@@ -73,6 +120,7 @@ public class InvoiceData {
 			ps = conn.prepareStatement(removeQuery);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -115,6 +163,8 @@ public class InvoiceData {
 			while(rs.next()){
 				addressID = rs.getInt("ID");
 			}
+			ps.close();
+			rs.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -129,6 +179,8 @@ public class InvoiceData {
 			ps.setString(5,phoneNo);
 			ps.executeUpdate();
 			ps.close();
+			rs.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -146,6 +198,7 @@ public class InvoiceData {
 			ps = conn.prepareStatement(removeQuery);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -188,25 +241,28 @@ public class InvoiceData {
 			while(rs.next()){
 				addressID = rs.getInt("ID");
 			}
+			rs.close();
+			ps.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
 		String airportCodeQuery = "Select Code from Airport where Code like ?;";
 		try {
 			deleteIfExists("Airport", "Code", airportCode, ps, rs, conn);
-			double latitude = latdegs + latmins/60;
-			double longitude = londegs + lonmins/60;
-			String airportQuery = "Insert into Airport (Code, Name, AddressCode, Latitude, Longitude, PassengerFacilityFee) values (?,?,?,?,?,?);";
+			String airportQuery = "Insert into Airport (Code, Name, AddressCode, LatDeg, LatMin, LonDeg, LonMin, PassengerFacilityFee) values (?,?,?,?,?,?,?,?);";
 			ps = conn.prepareStatement(airportQuery);
 			ps.setString(1, airportCode);
 			ps.setString(2, name);
 			ps.setInt(3,addressID);
-			ps.setDouble(4, latitude);
-			ps.setDouble(5, longitude);
-			ps.setDouble(6, passengerFacilityFee);
+			ps.setDouble(4, latdegs);
+			ps.setDouble(5, latmins);
+			ps.setDouble(6, londegs);
+			ps.setDouble(7, lonmins);
+			ps.setDouble(8, passengerFacilityFee);
 			ps.executeUpdate();
+			rs.close();
 			ps.close();
-
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -240,6 +296,7 @@ public class InvoiceData {
 			ps.setInt(2, emailID);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -259,6 +316,7 @@ public class InvoiceData {
 			ps = conn.prepareStatement(removeQuery);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -273,18 +331,20 @@ public class InvoiceData {
 		Connection conn = DatabaseInfo.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-
+		int personID = 0;
+		personID = findID("Person", "Code", primaryContactPersonCode, ps,rs,conn);
 		try {
 			deleteIfExists("Customer", "Code", customerCode, ps, rs, conn);
-			String customerQuery = "Insert into Customer (Code, Type, PersonCode, Name, AirlineMiles) values (?,?,?,?,?);";
+			String customerQuery = "Insert into Customer (Code, Type, PersonID, Name, AirlineMiles) values (?,?,?,?,?);";
 			ps = conn.prepareStatement(customerQuery);
 			ps.setString(1, customerCode);
 			ps.setString(2, customerType);
-			ps.setString(3, primaryContactPersonCode);
+			ps.setInt(3, personID);
 			ps.setString(4, name);
 			ps.setInt(5, airlineMiles);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -303,6 +363,7 @@ public class InvoiceData {
 			ps = conn.prepareStatement(removeQuery);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -376,7 +437,7 @@ public class InvoiceData {
 			ps.setString(9, productCode);
 			ps.executeUpdate();
 			ps.close();
-
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -444,7 +505,7 @@ public class InvoiceData {
 			ps.setDouble(12, productID);
 			ps.executeUpdate();
 			ps.close();
-
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -505,6 +566,7 @@ public class InvoiceData {
 			ps.setInt(10, productID);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -531,6 +593,7 @@ public class InvoiceData {
 			ps.setInt(3, ticketID);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -557,6 +620,7 @@ public class InvoiceData {
 			ps.setString(5, productCode);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -582,6 +646,7 @@ public class InvoiceData {
 			ps.setString(3, productCode);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -606,6 +671,7 @@ public class InvoiceData {
 			ps.setString(4, productCode);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -622,6 +688,7 @@ public class InvoiceData {
 			ps = conn.prepareStatement(removeQuery);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -650,7 +717,7 @@ public class InvoiceData {
 
 			ps.executeUpdate();
 			ps.close();
-
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -702,6 +769,7 @@ public class InvoiceData {
 			ps.setString(4, ticketNote);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -757,6 +825,7 @@ public class InvoiceData {
 			ps.setInt(2, passengerID);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -784,6 +853,7 @@ public class InvoiceData {
 			ps.setInt(3, invoiceID);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -810,6 +880,7 @@ public class InvoiceData {
 			ps.setInt(3, invoiceID);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -835,6 +906,7 @@ public class InvoiceData {
 			ps.setInt(3, invoiceID);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -861,6 +933,7 @@ public class InvoiceData {
 			ps.setInt(3, invoiceID);
 			ps.executeUpdate();
 			ps.close();
+			conn.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
@@ -884,7 +957,7 @@ public class InvoiceData {
 				ps.close();
 			}else{
 				ps.close();
-				rs.close();
+				rs.close(); 
 			}
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
@@ -900,6 +973,7 @@ public class InvoiceData {
 			while (rs.next()){
 				return rs.getInt("ID");					
 			}
+			ps.close();
 		} catch (SQLException e1) {
 			log.error("SQLException", e1);
 		}
