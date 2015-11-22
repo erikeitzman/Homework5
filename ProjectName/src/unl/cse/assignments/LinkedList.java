@@ -7,6 +7,26 @@ public class LinkedList {
 	private InvoiceListNode end;
 	private int size;
 	
+	public InvoiceListNode getStart() {
+		return start;
+	}
+
+	public void setStart(InvoiceListNode start) {
+		this.start = start;
+	}
+
+	public InvoiceListNode getEnd() {
+		return end;
+	}
+
+	public void setEnd(InvoiceListNode end) {
+		this.end = end;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
 	public LinkedList(){
 		start = null;
 		end = null;
