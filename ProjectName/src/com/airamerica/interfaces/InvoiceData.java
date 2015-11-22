@@ -108,33 +108,33 @@ public class InvoiceData {
 //		InvoiceData.addTicketToInvoice("INV001", "1241", "2015-06-11", "Operated by Bhaarat");
 //		InvoiceData.addPassengerInformation("INV001", "1241", "321nd", "ayylmao", 35, "Jew", "25");
 //		InvoiceData.addInsuranceToInvoice("INV001", "ff24", 2, "1241");
-
-		
+//
+//		
 		InvoiceData.removeAllPersons();
 		InvoiceData.addPerson("123", "john", "smith", "123-456-7890", "fake st", "lincoln", "NE", "68508", "USA");
-//		InvoiceData.addPerson("456", "jane", "smith", "123-456-7890", "fake st", "lincoln", "NE", "68508", "USA");
-//		InvoiceData.addPerson("789", "Jim", "Johns", "fake number", "Dodge", "Omaha", "NE", "68700", "USA");
-//		InvoiceData.addPerson("123123", "James", "Johns", "fake number", "DodgeST", "Omaha", "NE", "68700", "USA");
-//		InvoiceData.addAirport("LAX", "Los Angeles", "LA St", "LA", "CA", "12345", "USA", 10, 20, 100, 120, 0);
-//		InvoiceData.addAirport("ORD", "Chicago", "Some St", "Some", "fake", "13345", "USA", 20, 30, 300, 120, 0);
+		InvoiceData.addPerson("456", "jane", "smith", "123-456-7890", "fake st", "lincoln", "NE", "68508", "USA");
+		InvoiceData.addPerson("789", "Jim", "Johns", "fake number", "Dodge", "Omaha", "NE", "68700", "USA");
+		InvoiceData.addPerson("123123", "James", "Johns", "fake number", "DodgeST", "Omaha", "NE", "68700", "USA");
+		InvoiceData.addAirport("LAX", "Los Angeles", "LA St", "LA", "CA", "12345", "USA", 10, 20, 100, 120, 0);
+		InvoiceData.addAirport("ORD", "Chicago", "Some St", "Some", "fake", "13345", "USA", 20, 30, 300, 120, 0);
 		InvoiceData.addCustomer("C001", "Government", "123", "UNL", 100000);
 		InvoiceData.addInvoice("INV001", "C001", "online", "12-12-2014");
-//		InvoiceData.addStandardTicket("1234", "LAX", "ORD", "9:30", "12:30","12456v", "EC", "BOakdb");
-//		InvoiceData.addAwardsTicket("2344", "LAX", "ORD", "9:30", "12:40", "2323", "EC", "shitty", 1);
-//		InvoiceData.addOffSeasonTicket("48645", "2012-05-05", "2012-06-06", "ORD", "LAX", "10:30", "7:35", "adjio", "BC", "767", 50);
-//		InvoiceData.addSpecialAssistance("48615615615", "wheelchair");
-//		InvoiceData.addRefreshment("1", "coke", 1.50);
-//		InvoiceData.addInsurance("adfinsurance", "ProductName", "20-45", 100);
-//		InvoiceData.addTicketToInvoice("INV001", "1234", "01-03-2014", "shut up");
-//		InvoiceData.addPassengerInformation("INV001", "1234", "456", "ADFASDF", 45, "Bosnian", "20f");
-//		InvoiceData.addEmail("123", "adfasdf@gmail.com");
-//		InvoiceData.addEmail("123", "johnsmith@gmail.com");
-//		InvoiceData.addEmail("789", "adfoaidfjaoidfjaoseifjweiofj@gmail.com");
-//		InvoiceData.addCheckedBaggage("90fa", "1234");
-//		InvoiceData.addRefreshmentToInvoice("INV001", "1", 3);
-//		InvoiceData.addInsuranceToInvoice("INV001", "adfinsurance", 2, "1234");
-//		InvoiceData.addCheckedBaggageToInvoice("INV001", "90fa", 5);
-//		InvoiceData.addSpecialAssistanceToInvoice("INV001", "48615615615", "5648189189");
+		InvoiceData.addStandardTicket("1234", "LAX", "ORD", "9:30", "12:30","12456v", "EC", "BOakdb");
+		InvoiceData.addAwardsTicket("2344", "LAX", "ORD", "9:30", "12:40", "2323", "EC", "shitty", 1);
+		InvoiceData.addOffSeasonTicket("48645", "2012-05-05", "2012-06-06", "ORD", "LAX", "10:30", "7:35", "adjio", "BC", "767", 50);
+		InvoiceData.addSpecialAssistance("48615615615", "wheelchair");
+		InvoiceData.addRefreshment("1", "coke", 1.50);
+		InvoiceData.addInsurance("adfinsurance", "ProductName", "20-45", 100);
+		InvoiceData.addTicketToInvoice("INV001", "1234", "01-03-2014", "shut up");
+		InvoiceData.addPassengerInformation("INV001", "1234", "456", "ADFASDF", 45, "Bosnian", "20f");
+		InvoiceData.addEmail("123", "adfasdf@gmail.com");
+		InvoiceData.addEmail("123", "johnsmith@gmail.com");
+		InvoiceData.addEmail("789", "adfoaidfjaoidfjaoseifjweiofj@gmail.com");
+		InvoiceData.addCheckedBaggage("90fa", "1234");
+		InvoiceData.addRefreshmentToInvoice("INV001", "1", 3);
+		InvoiceData.addInsuranceToInvoice("INV001", "adfinsurance", 2, "1234");
+		InvoiceData.addCheckedBaggageToInvoice("INV001", "90fa", 5);
+		InvoiceData.addSpecialAssistanceToInvoice("INV001", "48615615615", "5648189189");
 	}
 
 	/**
@@ -148,13 +148,18 @@ public class InvoiceData {
 		try {
 			ps = conn.prepareStatement(removeQuery);
 			ps.executeUpdate();
-			ps.close();
 		} catch (SQLException e1) {
 			System.out.println(e1);
 		}
-		removeQuery = "Insert into Person (Code, FirstName, LastName) values (online,ONLINE,NULL);";
+		String fName = "Online";
+		String lName = "Null";
+		String code = "online";
+		removeQuery = "Insert into Person (Code, FirstName, LastName) values (?,?,?);";
 		try {
 			ps = conn.prepareStatement(removeQuery);
+			ps.setString(1, code);
+			ps.setString(2, fName);
+			ps.setString(3, lName);
 			ps.executeUpdate();
 			ps.close();
 			conn.close();
